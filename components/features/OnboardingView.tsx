@@ -3,14 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useHippomeStore } from "@/context/HippomeStoreProvider";
-import { SPM_SUBJECTS } from "@/data/subjects";
+import { useMnemoStore } from "@/context/MnemoStoreProvider";
+import { SUBJECTS } from "@/data/subjects";
 import { playPop, unlockAudioContext } from "@/lib/sound";
-import { BrandLogo } from "@/components/hippome/BrandLogo";
-import { HippomeMark } from "@/components/hippome/HippomeMark";
-import {
-  HippomeAvatarSlot,
-} from "@/components/hippome/HippomeAvatarSlot";
+import { BrandLogo } from "@/components/mnemo/BrandLogo";
+import { MnemoMark } from "@/components/mnemo/MnemoMark";
+import { HippomeAvatarSlot } from "@/components/avatar/HippomeAvatarSlot";
 import { HippomeExpression } from "@/lib/avatar-config";
 import {
   Blob,
@@ -24,64 +22,149 @@ interface OnboardingSlide {
   id: string;
   stageBg: string;
   isDark?: boolean;
-  title: (firstName: string) => string;
-  highlightWord: string;
+  title: string;
   expression: HippomeExpression;
   dialogue: (firstName: string) => string;
-  preview: "subjects" | "diagnostic" | "vouchers" | "milestone";
+  preview: "none" | "subjects" | "vouchers" | "milestone";
 }
 
 const ONBOARDING_SLIDES: OnboardingSlide[] = [
   {
     id: "welcome",
     stageBg: "bg-[var(--floral-white)] text-[var(--ink-surface)]",
-    title: (name) => `Eh ${name}, welcome!`,
-    highlightWord: "welcome!",
+    title: "Welcome to Mnemo!",
     expression: "happy",
     dialogue: (name) =>
-      `Wei ${name}! Hippome ni untuk Form 5 SPM budak-budak je. Quiz 5 soalan, lepas tu dapat voucher betul. No cap, confirm worth it!`,
-    preview: "subjects",
+      `Hi ${name}! I'm Hippome, your study buddy. Mnemo helps you learn with short quizzes and earn vouchers.`,
+    preview: "none",
   },
   {
-    id: "placement",
+    id: "subjects",
     stageBg: "bg-[var(--periwinkle)] text-[var(--ink-surface)]",
-    title: () => "Sikit je test dulu",
-    highlightWord: "test",
+    title: "Pick a subject",
     expression: "thinking",
     dialogue: () =>
-      "First time buka subject, I bagi 6 soalan quick. Chill, bukan exam pun. Nanti tahu level kau, Beginner, Intermediate ke Advanced, and topik mana kau lemah sikit.",
-    preview: "diagnostic",
+      "Mnemo has two subjects. Start with a quick check-up, then try the random or demo quiz.",
+    preview: "subjects",
   },
   {
     id: "vouchers",
     stageBg: "bg-[var(--pearl-aqua)] text-[var(--ink-surface)]",
-    title: () => "Lulus = dapat voucher",
-    highlightWord: "voucher",
+    title: "Earn vouchers",
     expression: "celebrating",
     dialogue: () =>
-      "Pilih topik, I generate 5 soalan fresh. Score 3 atas 5 je dah lulus! Boleh dapat TNG, ZUS, CHAGEE, Mixue, 7-Eleven. Tak lulus? Takpe, cuba lagi, soalan baru.",
+      "Get 3 out of 5 right to win a voucher. Missed it? Try again.",
     preview: "vouchers",
   },
   {
     id: "levelup",
     stageBg: "bg-[var(--ink-surface)] text-[var(--floral-white)]",
     isDark: true,
-    title: () => "Level up, duit naik",
-    highlightWord: "duit naik",
+    title: "Level up for bonuses",
     expression: "encouraging",
     dialogue: () =>
-      "3 kali lulus dalam satu subject, stamp penuh, kau naik level! Bonus gila: RM30, RM50, sampai RM100 untuk Grand Mastery. Gaskan bro!",
+      "Pass 3 quizzes in a subject to level up and win a bonus voucher.",
     preview: "milestone",
   },
 ];
 
+function InsideBoxItems({
+  preview,
+}: {
+  preview: OnboardingSlide["preview"];
+}) {
+  const prefersReduced = useReducedMotion();
+
+  if (preview === "none") return null;
+
+  if (preview === "subjects") {
+    return (
+      <div className="mt-6 flex flex-wrap gap-3">
+        {SUBJECTS.map((s, i) => (
+          <motion.div
+            key={s.id}
+            initial={prefersReduced ? false : { opacity: 0, scale: 0.7, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 18,
+              delay: 0.4 + i * 0.1,
+            }}
+          >
+            <Sticker
+              tone={i % 2 === 0 ? "aqua" : "periwinkle"}
+              tilt={i % 2 === 0 ? -2 : 2}
+            >
+              <span className="font-display text-base font-extrabold">
+                {s.name}
+              </span>
+            </Sticker>
+          </motion.div>
+        ))}
+      </div>
+    );
+  }
+
+  if (preview === "vouchers") {
+    const brands = ["TNG eWallet", "ZUS Coffee", "CHAGEE", "Mixue", "7-Eleven"];
+    return (
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        {brands.map((brand, i) => (
+          <motion.div
+            key={brand}
+            initial={prefersReduced ? false : { opacity: 0, scale: 0.7, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 18,
+              delay: 0.4 + i * 0.08,
+            }}
+          >
+            <Sticker tone="floral" tilt={i % 2 === 0 ? -2.5 : 2.5}>
+              <BrandLogo brand={brand} size={28} wobble={false} />
+              <span className="font-display text-sm font-extrabold">
+                {brand}
+              </span>
+            </Sticker>
+          </motion.div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={prefersReduced ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4 }}
+      className="mt-6 inline-flex flex-wrap items-center gap-4 rounded-[20px] border-2 border-[var(--ink-surface)] bg-[var(--floral-white)] p-4 text-[var(--ink-surface)]"
+    >
+      <StampTrack
+        passedCount={2}
+        targetCount={3}
+        rewardLabel="1 more pass to level up"
+        animateLatest
+      />
+      <Badge tone="ink">Bonus voucher</Badge>
+    </motion.div>
+  );
+}
+
 function KineticSpeech({
   text,
   isDark = false,
+  expression,
+  preview,
+  isTalking,
   onSpeakingChange,
 }: {
   text: string;
   isDark?: boolean;
+  expression: HippomeExpression;
+  preview: OnboardingSlide["preview"];
+  isTalking: boolean;
   onSpeakingChange: (speaking: boolean) => void;
 }) {
   const prefersReduced = useReducedMotion();
@@ -94,7 +177,7 @@ function KineticSpeech({
       return;
     }
     onSpeakingChange(true);
-    const durationMs = Math.min(2800, words.length * 60 + 250);
+    const durationMs = Math.min(2600, words.length * 60 + 250);
     const timer = window.setTimeout(() => {
       onSpeakingChange(false);
     }, durationMs);
@@ -109,40 +192,35 @@ function KineticSpeech({
   return (
     <div
       onClick={handleSkip}
-      className={`sticker relative cursor-pointer p-5 sm:p-6 ${
+      aria-label="Hippome message, click to show all text"
+      className={`sticker relative w-full max-w-4xl cursor-pointer p-8 pt-10 sm:p-12 sm:pt-12 ${
         isDark
-          ? "bg-[var(--ink-surface-raised)] text-[var(--floral-white)] border-[var(--pearl-aqua)] shadow-[6px_6px_0_var(--pearl-aqua)]"
+          ? "border-[var(--pearl-aqua)] bg-[var(--ink-surface-raised)] text-[var(--floral-white)] shadow-[6px_6px_0_var(--pearl-aqua)]"
           : "bg-[var(--surface)] text-[var(--ink-surface)]"
       }`}
     >
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <span
-          className={`text-micro ${
-            isDark ? "text-[var(--pearl-aqua)]" : "text-[var(--muted)]"
-          }`}
-        >
-          Hippome cakap
-        </span>
-        {!skipped && !prefersReduced && (
-          <span className="text-[11px] font-semibold opacity-60">
-            Tap to skip
-          </span>
-        )}
+      {/* Small Hippome Chip on Top-Left Edge (no label) */}
+      <div className="absolute -top-8 left-6">
+        <HippomeAvatarSlot
+          expression={expression}
+          size="md"
+          talking={isTalking}
+          onDark={isDark}
+        />
       </div>
 
-      <p className="font-display text-lg font-bold leading-snug sm:text-xl">
+      <p className="font-display text-2xl font-bold leading-snug sm:text-4xl">
         {words.map((word, idx) => {
-          const isEmphasised =
-            /^(SPM|RM30|RM50|RM100|TNG|ZUS|CHAGEE|Mixue|7-Eleven|No|confirm|Gaskan)$/i.test(
-              word.replace(/[.,!?]/g, "")
-            );
+          const isEmphasised = /^(Mnemo|Hippome|vouchers?|bonus|level)$/i.test(
+            word.replace(/[.,!?]/g, "")
+          );
           if (prefersReduced || skipped) {
             return (
               <span
                 key={`${idx}-${word}`}
-                className={`inline-block mr-1.5 ${
+                className={`mr-2 inline-block ${
                   isEmphasised
-                    ? "rounded-md bg-[var(--pearl-aqua)] px-1.5 text-[var(--ink-surface)]"
+                    ? "rounded-lg bg-[var(--pearl-aqua)] px-2 text-[var(--ink-surface)]"
                     : ""
                 }`}
               >
@@ -162,9 +240,9 @@ function KineticSpeech({
                 damping: 18,
                 delay: idx * 0.055,
               }}
-              className={`inline-block mr-1.5 ${
+              className={`mr-2 inline-block ${
                 isEmphasised
-                  ? "rounded-md bg-[var(--pearl-aqua)] px-1.5 text-[var(--ink-surface)]"
+                  ? "rounded-lg bg-[var(--pearl-aqua)] px-2 text-[var(--ink-surface)]"
                   : ""
               }`}
             >
@@ -173,77 +251,8 @@ function KineticSpeech({
           );
         })}
       </p>
-    </div>
-  );
-}
 
-function SlideOrbitStickers({
-  preview,
-}: {
-  preview: OnboardingSlide["preview"];
-}) {
-  if (preview === "subjects") {
-    return (
-      <div className="flex flex-wrap gap-2.5">
-        {SPM_SUBJECTS.map((s, i) => (
-          <Sticker
-            key={s.id}
-            tone={i % 2 === 0 ? "aqua" : "periwinkle"}
-            tilt={i % 2 === 0 ? -2.5 : 2.5}
-          >
-            <span className="text-xs font-extrabold">{s.name}</span>
-            <span className="num text-[11px] opacity-75">{s.spmCode}</span>
-          </Sticker>
-        ))}
-      </div>
-    );
-  }
-
-  if (preview === "diagnostic") {
-    return (
-      <div className="flex flex-wrap gap-3">
-        <Sticker tone="aqua" tilt={-3}>
-          <span className="font-display text-sm font-extrabold">
-            Beginner · RM5
-          </span>
-        </Sticker>
-        <Sticker tone="floral" tilt={2}>
-          <span className="font-display text-sm font-extrabold">
-            Intermediate · RM10
-          </span>
-        </Sticker>
-        <Sticker tone="ink" tilt={-2}>
-          <span className="font-display text-sm font-extrabold text-[var(--pearl-aqua)]">
-            Advanced · RM20
-          </span>
-        </Sticker>
-      </div>
-    );
-  }
-
-  if (preview === "vouchers") {
-    const brands = ["TNG eWallet", "ZUS Coffee", "CHAGEE", "Mixue", "7-Eleven"];
-    return (
-      <div className="flex flex-wrap items-center gap-3">
-        {brands.map((brand, i) => (
-          <Sticker key={brand} tone="floral" tilt={i % 2 === 0 ? -3 : 3}>
-            <BrandLogo brand={brand} size={26} wobble={false} />
-            <span className="font-display text-xs font-extrabold">{brand}</span>
-          </Sticker>
-        ))}
-      </div>
-    );
-  }
-
-  return (
-    <div className="sticker inline-flex flex-wrap items-center gap-4 bg-[var(--floral-white)] p-4 text-[var(--ink-surface)]">
-      <StampTrack
-        passedCount={2}
-        targetCount={3}
-        rewardLabel="1 lagi untuk RM30"
-        animateLatest
-      />
-      <Badge tone="ink">RM30 · RM50 · RM100</Badge>
+      <InsideBoxItems preview={preview} />
     </div>
   );
 }
@@ -251,7 +260,7 @@ function SlideOrbitStickers({
 export function OnboardingView() {
   const router = useRouter();
   const prefersReduced = useReducedMotion();
-  const { isHydrated, activeUser, completeOnboarding } = useHippomeStore();
+  const { isHydrated, activeUser, completeOnboarding } = useMnemoStore();
   const [stepIndex, setStepIndex] = useState(0);
   const [isTalking, setIsTalking] = useState(false);
   const [bursting, setBursting] = useState(false);
@@ -267,7 +276,7 @@ export function OnboardingView() {
     return (
       <main className="flex min-h-[100dvh] items-center justify-center bg-[var(--ground)] p-6">
         <p className="font-display text-lg font-bold text-[var(--muted)]">
-          Loading Hippome intro...
+          Loading Mnemo intro...
         </p>
       </main>
     );
@@ -323,15 +332,15 @@ export function OnboardingView() {
       {/* Slim Header */}
       <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-5 pb-3 sm:px-8">
         <div className="flex items-center gap-2.5">
-          <HippomeMark size={34} inverted={slide.isDark} />
+          <MnemoMark size={34} inverted={slide.isDark} />
           <span className="font-display text-lg font-extrabold tracking-[-0.03em]">
-            HIPPOME TOUR
+            MNEMO TOUR
           </span>
         </div>
 
         <div className="flex items-center gap-4">
           <span className="font-display num text-xl font-extrabold tracking-[-0.03em]">
-            0{stepIndex + 1} / 0{ONBOARDING_SLIDES.length}
+            {stepIndex + 1} / {ONBOARDING_SLIDES.length}
           </span>
           <Button
             variant={slide.isDark ? "aqua" : "outline"}
@@ -343,8 +352,8 @@ export function OnboardingView() {
         </div>
       </header>
 
-      {/* Main Kinetic Stage */}
-      <section className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 items-center px-5 py-6 sm:px-8">
+      {/* Main Centered Stage */}
+      <section className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 items-center justify-center px-5 py-8 sm:px-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={slide.id}
@@ -352,56 +361,44 @@ export function OnboardingView() {
             animate={{ opacity: 1, y: 0 }}
             exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -14 }}
             transition={{ duration: 0.28 }}
-            className="grid w-full items-center gap-8 md:grid-cols-12"
+            className="flex w-full flex-col items-center gap-12 text-center"
           >
-            {/* Avatar Left */}
-            <div className="flex flex-col items-center md:col-span-5">
-              <HippomeAvatarSlot
-                expression={slide.expression}
-                size="mega"
-                floating
-                talking={isTalking}
-                onDark={slide.isDark}
+            <div className="relative flex flex-col items-center">
+              <SplitText
+                key={`title-${slide.id}`}
+                text={slide.title}
+                by="word"
+                stagger={0.055}
+                className="text-giga text-center"
               />
+              <svg
+                viewBox="0 0 260 18"
+                fill="none"
+                className="mt-3 h-4 w-52 sm:w-72"
+                aria-hidden="true"
+              >
+                <motion.path
+                  d="M4 12C68 3 164 4 256 12"
+                  stroke={slide.isDark ? "#75c9c8" : "#1b2338"}
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
+                />
+              </svg>
             </div>
 
-            {/* Huge Typography + Talking Bubble + Orbit Stickers Right */}
-            <div className="space-y-6 md:col-span-7">
-              <div className="relative">
-                <SplitText
-                  key={`title-${slide.id}`}
-                  text={slide.title(firstName)}
-                  by="word"
-                  stagger={0.055}
-                  className="text-mega"
-                />
-                {/* Animated Scribble Underline */}
-                <svg
-                  viewBox="0 0 260 18"
-                  fill="none"
-                  className="mt-2 h-4 w-52 sm:w-72"
-                  aria-hidden="true"
-                >
-                  <motion.path
-                    d="M4 12C68 3 164 4 256 12"
-                    stroke={slide.isDark ? "#75c9c8" : "#1b2338"}
-                    strokeWidth="5"
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
-                  />
-                </svg>
-              </div>
-
+            <div className="w-full text-left flex justify-center">
               <KineticSpeech
                 key={slide.id}
                 text={slide.dialogue(firstName)}
                 isDark={slide.isDark}
+                expression={slide.expression}
+                preview={slide.preview}
+                isTalking={isTalking}
                 onSpeakingChange={setIsTalking}
               />
-
-              <SlideOrbitStickers preview={slide.preview} />
             </div>
           </motion.div>
         </AnimatePresence>
@@ -448,13 +445,8 @@ export function OnboardingView() {
             <ChevronRightIcon className="h-5 w-5" />
           </Button>
         ) : (
-          <Button
-            variant="aqua"
-            size="xl"
-            magnetic
-            onClick={handleFinish}
-          >
-            <span>Jom Study!</span>
+          <Button variant="aqua" size="xl" magnetic onClick={handleFinish}>
+            <span>Let&apos;s Go!</span>
             <ChevronRightIcon className="h-5 w-5" />
           </Button>
         )}

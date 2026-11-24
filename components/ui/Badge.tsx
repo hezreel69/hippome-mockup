@@ -7,7 +7,10 @@ type BadgeTone =
   | "warning"
   | "danger"
   | "highlight"
-  | "ink";
+  | "ink"
+  | "beginner"
+  | "intermediate"
+  | "advanced";
 
 const TONE_CLASSES: Record<BadgeTone, string> = {
   neutral:
@@ -24,6 +27,12 @@ const TONE_CLASSES: Record<BadgeTone, string> = {
     "bg-[var(--periwinkle)] text-[var(--ink-surface)] border-[var(--ink-surface)]",
   ink:
     "bg-[var(--ink-surface)] text-[var(--accent-pop)] border-[var(--ink-surface)]",
+  beginner:
+    "bg-[var(--level-beginner)] text-[var(--level-beginner-ink)] border-[var(--ink-surface)]",
+  intermediate:
+    "bg-[var(--level-intermediate)] text-[var(--level-intermediate-ink)] border-[var(--ink-surface)]",
+  advanced:
+    "bg-[var(--level-advanced)] text-[var(--level-advanced-ink)] border-[var(--ink-surface)]",
 };
 
 interface BadgeProps {
@@ -46,7 +55,7 @@ export function Badge({
           ? { transform: `rotate(${tilt}deg)` }
           : undefined
       }
-      className={`inline-flex flex-none whitespace-nowrap items-center gap-1.5 rounded-[var(--radius-pill)] border-2 px-3 py-0.5 text-[11px] font-bold uppercase tracking-[0.08em] leading-5 ${TONE_CLASSES[tone]} ${className}`}
+      className={`inline-flex flex-none whitespace-nowrap items-center gap-1.5 rounded-[var(--radius-pill)] border-2 px-3.5 py-1 text-xs font-extrabold uppercase tracking-[0.08em] leading-5 ${TONE_CLASSES[tone]} ${className}`}
     >
       {children}
     </span>

@@ -1,4 +1,4 @@
-import { DifficultyLevel, Question } from "@/types/hippome";
+import { DifficultyLevel, Question } from "@/types/mnemo";
 import { expandQuestions } from "./helpers";
 
 export function getSejarahQuestions(

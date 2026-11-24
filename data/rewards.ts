@@ -1,10 +1,10 @@
 import {
-  DifficultyLevel,
+  QuizMode,
   SubjectId,
   Voucher,
   VoucherTemplate,
   VoucherTier,
-} from "@/types/hippome";
+} from "@/types/mnemo";
 
 export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
   // Beginner Quiz Rewards (RM5)
@@ -14,7 +14,7 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     brand: "TNG eWallet",
     title: "TNG eWallet RM5 Reload PIN",
     valueRm: 5,
-    description: "Instant RM5 credit top-up for Touch 'n Go eWallet.",
+    description: "RM5 credit top-up for Touch 'n Go eWallet.",
     codePrefix: "TNG5",
   },
   {
@@ -23,7 +23,7 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     brand: "Mixue",
     title: "Mixue RM5 Ice Cream & Tea Voucher",
     valueRm: 5,
-    description: "Redeem RM5 off any Mixue drink or sundae.",
+    description: "RM5 off any Mixue drink or sundae.",
     codePrefix: "MIX5",
   },
   {
@@ -32,7 +32,7 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     brand: "7-Eleven",
     title: "7-Eleven RM5 Snack E-Voucher",
     valueRm: 5,
-    description: "Use at any 7-Eleven Malaysia outlet for snacks or drinks.",
+    description: "RM5 off snacks or drinks at 7-Eleven.",
     codePrefix: "7E05",
   },
   {
@@ -52,7 +52,7 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     brand: "ZUS Coffee",
     title: "ZUS Coffee RM10 Drink Voucher",
     valueRm: 10,
-    description: "RM10 off any handcrafted ZUS Coffee beverage via app.",
+    description: "RM10 off any handcrafted ZUS Coffee drink.",
     codePrefix: "ZUS10",
   },
   {
@@ -61,7 +61,7 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     brand: "CHAGEE",
     title: "CHAGEE RM10 Fresh Milk Tea Voucher",
     valueRm: 10,
-    description: "Enjoy RM10 off CHAGEE signature tea drinks.",
+    description: "RM10 off CHAGEE signature tea drinks.",
     codePrefix: "CHG10",
   },
   {
@@ -70,7 +70,7 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     brand: "7-Eleven",
     title: "7-Eleven RM10 E-Voucher",
     valueRm: 10,
-    description: "RM10 in-store credit across 7-Eleven Malaysia.",
+    description: "RM10 in-store credit across 7-Eleven.",
     codePrefix: "7E10",
   },
   {
@@ -90,7 +90,7 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     brand: "TNG eWallet",
     title: "TNG eWallet RM20 Reload PIN",
     valueRm: 20,
-    description: "RM20 Touch 'n Go eWallet credit for top SPM performers.",
+    description: "RM20 Touch 'n Go eWallet credit.",
     codePrefix: "TNG20",
   },
   {
@@ -99,7 +99,7 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     brand: "ZUS Coffee",
     title: "ZUS Coffee RM20 Study Fuel Voucher",
     valueRm: 20,
-    description: "Two study-session coffees or pastries on Hippome.",
+    description: "RM20 off ZUS Coffee drinks and pastries.",
     codePrefix: "ZUS20",
   },
   {
@@ -128,7 +128,7 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     brand: "TNG eWallet",
     title: "Level-Up Bonus: TNG eWallet RM30 PIN",
     valueRm: 30,
-    description: "Huge reward for leveling up to Intermediate!",
+    description: "RM30 bonus voucher for reaching Intermediate!",
     codePrefix: "LVL30",
   },
   {
@@ -137,7 +137,7 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     brand: "Popular",
     title: "Level-Up Bonus: Popular RM30 Book Voucher",
     valueRm: 30,
-    description: "RM30 at Popular Bookstore for SPM prep or stationery.",
+    description: "RM30 Popular Bookstore voucher for reaching Intermediate!",
     codePrefix: "POP30",
   },
 
@@ -146,18 +146,18 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     templateId: "ms-adv-tng-50",
     tier: "milestone-advanced",
     brand: "TNG eWallet",
-    title: "Level-Up Mega Bonus: TNG eWallet RM50 PIN",
+    title: "Level-Up Bonus: TNG eWallet RM50 PIN",
     valueRm: 50,
-    description: "Huge RM50 reward for reaching Advanced level!",
+    description: "RM50 bonus voucher for reaching Advanced!",
     codePrefix: "ADV50",
   },
   {
     templateId: "ms-adv-chagee-50",
     tier: "milestone-advanced",
     brand: "CHAGEE",
-    title: "Level-Up Mega Bonus: CHAGEE RM50 Voucher",
+    title: "Level-Up Bonus: CHAGEE RM50 Voucher",
     valueRm: 50,
-    description: "Celebrate reaching Advanced with RM50 at CHAGEE!",
+    description: "RM50 CHAGEE voucher for reaching Advanced!",
     codePrefix: "CHG50",
   },
 
@@ -166,18 +166,18 @@ export const VOUCHER_TEMPLATES: VoucherTemplate[] = [
     templateId: "ms-mas-tng-100",
     tier: "milestone-mastery",
     brand: "TNG eWallet",
-    title: "SPM Grand Mastery: TNG eWallet RM100 PIN",
+    title: "Grand Mastery: TNG eWallet RM100 PIN",
     valueRm: 100,
-    description: "Maximum RM100 reward for conquering Advanced SPM quizzes!",
-    codePrefix: "SPM100",
+    description: "RM100 TNG eWallet voucher for completing Advanced mastery!",
+    codePrefix: "MNM100",
   },
   {
     templateId: "ms-mas-shopee-100",
     tier: "milestone-mastery",
     brand: "Shopee",
-    title: "SPM Grand Mastery: Shopee RM100 Voucher",
+    title: "Grand Mastery: Shopee RM100 Voucher",
     valueRm: 100,
-    description: "RM100 Shopee Malaysia voucher for Advanced SPM masters.",
+    description: "RM100 Shopee voucher for completing Advanced mastery!",
     codePrefix: "SHP100",
   },
 ];
@@ -195,20 +195,14 @@ export function getTemplatesForTier(tier: VoucherTier): VoucherTemplate[] {
   return VOUCHER_TEMPLATES.filter((v) => v.tier === tier);
 }
 
-export function mintVoucherForTier(params: {
-  tier: VoucherTier;
-  subjectId: SubjectId;
-  topicId?: string;
-  seedOffset?: number;
-}): Voucher {
-  const pool = getTemplatesForTier(params.tier);
-  const index =
-    typeof params.seedOffset === "number"
-      ? Math.abs(params.seedOffset) % pool.length
-      : Math.floor(Math.random() * pool.length);
-  const template = pool[index];
-
-  const isMilestone = params.tier.startsWith("milestone-");
+export function mintVoucherFromTemplate(
+  template: VoucherTemplate,
+  params: {
+    subjectId: SubjectId;
+    quizMode?: QuizMode;
+  }
+): Voucher {
+  const isMilestone = template.tier.startsWith("milestone-");
 
   return {
     id: `vch_${Date.now()}_${randomCodeSegment(4)}`,
@@ -222,11 +216,7 @@ export function mintVoucherForTier(params: {
     isMilestone,
     earnedAt: new Date().toISOString(),
     earnedFromSubjectId: params.subjectId,
-    earnedFromTopicId: params.topicId,
+    earnedFromQuizMode: params.quizMode,
     redeemedAt: null,
   };
-}
-
-export function getRewardTierForLevel(level: DifficultyLevel): VoucherTier {
-  return level;
 }

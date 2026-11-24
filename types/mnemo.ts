@@ -1,27 +1,13 @@
 export type DifficultyLevel = "beginner" | "intermediate" | "advanced";
 
-export type SubjectId =
-  | "sejarah"
-  | "bahasa-melayu"
-  | "english"
-  | "mathematics"
-  | "science";
+export type SubjectId = "sejarah" | "mathematics";
 
-export interface Topic {
-  id: string;
-  subjectId: SubjectId;
-  name: string;
-  syllabusTag: string;
-  description: string;
-}
+export type QuizMode = "random" | "demo";
 
 export interface Subject {
   id: SubjectId;
   name: string;
-  spmCode: string;
-  medium: "Bahasa Melayu" | "English";
   tagline: string;
-  topics: Topic[];
 }
 
 export interface Question {
@@ -39,7 +25,7 @@ export interface Question {
 export interface AssessmentQuestion {
   id: string;
   subjectId: SubjectId;
-  topicId: string;
+  topicId?: string;
   difficultyWeight: 1 | 2 | 3;
   prompt: string;
   options: [string, string, string, string];
@@ -77,14 +63,13 @@ export interface Voucher {
   isMilestone: boolean;
   earnedAt: string;
   earnedFromSubjectId: SubjectId;
-  earnedFromTopicId?: string;
+  earnedFromQuizMode?: QuizMode;
   redeemedAt: string | null;
 }
 
 export interface SubjectProgress {
   subjectId: SubjectId;
   level: DifficultyLevel | null;
-  weakestTopicId: string | null;
   assessmentScore: number | null;
   assessmentTotal: number | null;
   assessmentCompletedAt: string | null;
@@ -96,7 +81,7 @@ export interface SubjectProgress {
 export interface QuizAttempt {
   id: string;
   subjectId: SubjectId;
-  topicId: string;
+  quizMode: QuizMode;
   level: DifficultyLevel;
   score: number;
   totalQuestions: number;
@@ -112,7 +97,6 @@ export interface UserProfile {
   name: string;
   email: string;
   password: string;
-  form: "Form 5";
   isDemo?: boolean;
   hasCompletedOnboarding: boolean;
   createdAt: string;
@@ -123,7 +107,7 @@ export interface UserProfile {
   lastAttemptQuestionIdsByKey: Record<string, string[]>;
 }
 
-export interface HippomePersistedState {
+export interface MnemoPersistedState {
   activeUserId: string | null;
   users: Record<string, UserProfile>;
 }

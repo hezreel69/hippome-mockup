@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { SUBJECT_MAP } from "@/data/subjects";
-import { Voucher } from "@/types/hippome";
-import { BrandLogo } from "@/components/hippome/BrandLogo";
+import { Voucher } from "@/types/mnemo";
+import { BrandLogo } from "@/components/mnemo/BrandLogo";
 import { Badge, Button, CheckIcon, CopyIcon } from "@/components/ui";
 
 interface VoucherCardProps {
@@ -87,11 +87,11 @@ export function VoucherCard({
           <div className="flex min-w-0 items-center gap-3">
             <BrandLogo brand={voucher.brand} size={48} />
             <div className="min-w-0">
-              <p className="font-display truncate text-base font-bold text-[var(--text)]">
+              <p className="font-display truncate text-base font-extrabold text-[var(--text)]">
                 {voucher.brand}
               </p>
-              <p className="text-xs font-medium text-[var(--muted)]">
-                {voucher.isMilestone ? "Milestone bonus" : "Quiz reward"} ·{" "}
+              <p className="text-xs font-semibold text-[var(--muted)]">
+                {voucher.isMilestone ? "Bonus voucher" : "Quiz voucher"} ·{" "}
                 {subjectName}
               </p>
             </div>

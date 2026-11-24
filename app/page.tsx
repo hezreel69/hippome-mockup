@@ -2,13 +2,13 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useHippomeStore } from "@/context/HippomeStoreProvider";
-import { HippomeMark } from "@/components/hippome/HippomeMark";
+import { useMnemoStore } from "@/context/MnemoStoreProvider";
+import { MnemoMark } from "@/components/mnemo/MnemoMark";
 import { Blob, Marquee, SplitText } from "@/components/motion";
 
 export default function HomePage() {
   const router = useRouter();
-  const { isHydrated, activeUser } = useHippomeStore();
+  const { isHydrated, activeUser } = useMnemoStore();
 
   useEffect(() => {
     if (!isHydrated) return;
@@ -46,9 +46,9 @@ export default function HomePage() {
       />
 
       <div className="relative z-10 flex flex-col items-center gap-6 text-center">
-        <HippomeMark size={68} />
+        <MnemoMark size={68} />
         <SplitText
-          text="HIPPOME"
+          text="MNEMO"
           by="char"
           stagger={0.04}
           className="text-mega text-[var(--ink-surface)]"
@@ -58,13 +58,13 @@ export default function HomePage() {
             speed={14}
             items={[
               <span key="1" className="text-micro">
-                SPM 2026 ✦
+                LEARN SMARTER ✦
               </span>,
               <span key="2" className="text-micro">
-                REAL VOUCHERS ✦
+                EARN VOUCHERS ✦
               </span>,
               <span key="3" className="text-micro">
-                NO CAP ✦
+                YOU CAN DO IT ✦
               </span>,
             ]}
           />

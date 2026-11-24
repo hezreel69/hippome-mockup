@@ -4,10 +4,11 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useHippomeStore } from "@/context/HippomeStoreProvider";
-import { SPM_SUBJECTS } from "@/data/subjects";
-import { DifficultyLevel } from "@/types/hippome";
-import { HippomeMark } from "@/components/hippome/HippomeMark";
+import { useMnemoStore } from "@/context/MnemoStoreProvider";
+import { SUBJECTS } from "@/data/subjects";
+import { LEVEL_LABELS } from "@/lib/config";
+import { LEVEL_TONE } from "@/lib/level-style";
+import { MnemoMark } from "@/components/mnemo/MnemoMark";
 import { Marquee } from "@/components/motion";
 import {
   Badge,
@@ -26,18 +27,9 @@ interface AppShellProps {
   focusMode?: boolean;
 }
 
-const LEVEL_LABEL: Record<DifficultyLevel, string> = {
-  beginner: "Beginner",
-  intermediate: "Intermediate",
-  advanced: "Advanced",
-};
-
 const SUBJECT_TILE_PALETTES = [
-  { bg: "bg-[var(--pearl-aqua)]", tilt: -2.5 },
+  { bg: "bg-[var(--pearl-aqua)]", tilt: -2.2 },
   { bg: "bg-[var(--periwinkle)]", tilt: 2 },
-  { bg: "bg-[var(--wisteria)]", tilt: -1.5 },
-  { bg: "bg-[var(--floral-white)]", tilt: 2.5 },
-  { bg: "bg-[var(--lavender)]", tilt: -2 },
 ] as const;
 
 function getInitials(name: string): string {
@@ -74,7 +66,7 @@ export function AppShell({
   const router = useRouter();
   const pathname = usePathname();
   const prefersReduced = useReducedMotion();
-  const { isHydrated, activeUser, logout, resetAllData } = useHippomeStore();
+  const { isHydrated, activeUser, logout, resetAllData } = useMnemoStore();
 
   const [subjectsOverlayOpen, setSubjectsOverlayOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -115,20 +107,17 @@ export function AppShell({
           }
           transition={{ duration: 1.6, repeat: Infinity }}
         >
-          <HippomeMark size={64} />
+          <MnemoMark size={64} />
         </motion.div>
         <div className="w-full max-w-md border-y-2 border-[var(--ink-surface)] bg-[var(--pearl-aqua)] py-2">
           <Marquee
             speed={16}
             items={[
               <span key="1" className="text-micro text-[var(--ink-surface)]">
-                LOADING WORKSPACE ✦
+                LOADING MNEMO ✦
               </span>,
               <span key="2" className="text-micro text-[var(--ink-surface)]">
-                FORM 5 SPM ✦
-              </span>,
-              <span key="3" className="text-micro text-[var(--ink-surface)]">
-                HIPPOME READY ✦
+                ALMOST READY ✦
               </span>,
             ]}
           />
@@ -150,8 +139,8 @@ export function AppShell({
     (isRewards
       ? "Voucher Wallet"
       : isSubjectRoute
-        ? "SPM Subject"
-        : "Study Home");
+        ? "Subject"
+        : "Mnemo");
 
   const handleLogout = () => {
     setProfileMenuOpen(false);
@@ -178,19 +167,11 @@ export function AppShell({
       {/* Desktop Flat Editorial Masthead */}
       <header className="sticky top-0 z-40 hidden border-b-2 border-[var(--ink-surface)] bg-[var(--floral-white)] lg:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3.5">
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-3 group"
-          >
-            <HippomeMark size={38} />
-            <div>
-              <span className="font-display block text-2xl font-extrabold leading-none tracking-[-0.04em] text-[var(--text)]">
-                HIPPOME
-              </span>
-              <span className="text-micro block text-[var(--muted)]">
-                Form 5 SPM
-              </span>
-            </div>
+          <Link href="/dashboard" className="flex items-center gap-3">
+            <MnemoMark size={38} />
+            <span className="font-display text-2xl font-extrabold leading-none tracking-[-0.04em] text-[var(--text)]">
+              MNEMO
+            </span>
           </Link>
 
           <nav aria-label="Main navigation" className="flex items-center gap-8">
@@ -307,7 +288,7 @@ export function AppShell({
       {/* Mobile Top Bar */}
       <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b-2 border-[var(--ink-surface)] bg-[var(--floral-white)] px-4 py-3 lg:hidden">
         <Link href="/dashboard" className="flex items-center gap-2.5">
-          <HippomeMark size={30} />
+          <MnemoMark size={30} />
           <span className="font-display text-lg font-extrabold tracking-[-0.03em] text-[var(--text)]">
             {resolvedMobileTitle}
           </span>
@@ -445,15 +426,15 @@ export function AppShell({
             className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-[var(--ink-surface)] p-5 text-[var(--floral-white)] sm:p-8"
             role="dialog"
             aria-modal="true"
-            aria-label="Pick a Form 5 SPM Subject"
+            aria-label="Pick a Subject"
           >
-            <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 pb-6">
+            <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 pb-6">
               <div>
-                <p className="text-micro text-[var(--pearl-aqua)]">
-                  Form 5 SPM
+                <p className="text-eyebrow text-[var(--pearl-aqua)]">
+                  Subjects
                 </p>
                 <h2 className="text-display text-[var(--floral-white)]">
-                  Pick your battle
+                  Pick your battle!
                 </h2>
               </div>
 
@@ -468,8 +449,8 @@ export function AppShell({
               </Button>
             </div>
 
-            <div className="mx-auto grid w-full max-w-6xl flex-1 content-center gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {SPM_SUBJECTS.map((subject, idx) => {
+            <div className="mx-auto grid w-full max-w-5xl flex-1 content-center gap-6 sm:grid-cols-2">
+              {SUBJECTS.map((subject, idx) => {
                 const prog = activeUser.subjectProgress[subject.id];
                 const href = prog?.level
                   ? `/subjects/${subject.id}`
@@ -493,28 +474,25 @@ export function AppShell({
                       type: "spring",
                       stiffness: 260,
                       damping: 20,
-                      delay: prefersReduced ? 0 : idx * 0.05,
+                      delay: prefersReduced ? 0 : idx * 0.06,
                     }}
                   >
                     <Link
                       href={href}
                       onClick={() => setSubjectsOverlayOpen(false)}
-                      className={`sticker flex h-full flex-col justify-between gap-4 p-6 text-[var(--ink-surface)] ${palette.bg}`}
+                      className={`sticker flex h-full min-h-[190px] flex-col justify-between gap-4 p-7 text-[var(--ink-surface)] ${palette.bg}`}
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="text-micro">{subject.spmCode}</span>
-                        <Badge tone={prog?.level ? "ink" : "neutral"}>
-                          {prog?.level ? LEVEL_LABEL[prog.level] : "New"}
+                      <div className="flex items-start justify-end">
+                        <Badge tone={prog?.level ? LEVEL_TONE[prog.level] : "neutral"}>
+                          {prog?.level ? LEVEL_LABELS[prog.level] : "Check-up"}
                         </Badge>
                       </div>
                       <div>
-                        <h3 className="font-display text-2xl font-extrabold leading-tight tracking-[-0.02em]">
+                        <h3 className="font-display text-3xl font-extrabold leading-tight tracking-[-0.02em]">
                           {subject.name}
                         </h3>
-                        <p className="mt-1 text-xs font-semibold opacity-80">
-                          {prog?.level
-                            ? `${prog.quizzesPassedAtCurrentLevel}/3 stamps`
-                            : "6-question quick check-up"}
+                        <p className="mt-1 text-sm font-bold opacity-80">
+                          {subject.tagline}
                         </p>
                       </div>
                     </Link>

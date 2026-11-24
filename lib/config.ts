@@ -1,6 +1,6 @@
-import { DifficultyLevel, VoucherTier } from "@/types/hippome";
+import { DifficultyLevel, VoucherTier } from "@/types/mnemo";
 
-export const STORAGE_KEY = "hippome_mockup_v1";
+export const STORAGE_KEY = "mnemo_mockup_v1";
 
 export const QUIZ_QUESTION_COUNT = 5;
 export const PASS_SCORE_PERCENT = 60;
@@ -20,18 +20,6 @@ export const LEVEL_LABELS: Record<DifficultyLevel, string> = {
   advanced: "Advanced",
 };
 
-export const LEVEL_DESCRIPTIONS: Record<DifficultyLevel, string> = {
-  beginner: "Core SPM Form 5 foundations & direct recall",
-  intermediate: "Standard SPM application & multi-step questions",
-  advanced: "KBAT / HOTS SPM exam-grade challenges",
-};
-
-export const QUIZ_REWARD_RM: Record<DifficultyLevel, number> = {
-  beginner: 5,
-  intermediate: 10,
-  advanced: 20,
-};
-
 export const MILESTONE_REWARD_CONFIG: Record<
   DifficultyLevel,
   {
@@ -45,19 +33,19 @@ export const MILESTONE_REWARD_CONFIG: Record<
     nextLevel: "intermediate",
     tier: "milestone-intermediate",
     valueRm: 30,
-    label: "Intermediate Promotion Reward",
+    label: "Intermediate Bonus",
   },
   intermediate: {
     nextLevel: "advanced",
     tier: "milestone-advanced",
     valueRm: 50,
-    label: "Advanced Promotion Reward",
+    label: "Advanced Bonus",
   },
   advanced: {
     nextLevel: "advanced",
     tier: "milestone-mastery",
     valueRm: 100,
-    label: "SPM Grand Mastery Reward",
+    label: "Grand Mastery Bonus",
   },
 };
 

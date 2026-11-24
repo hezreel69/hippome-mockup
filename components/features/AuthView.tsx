@@ -3,35 +3,27 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion } from "motion/react";
-import { useHippomeStore } from "@/context/HippomeStoreProvider";
+import { useMnemoStore } from "@/context/MnemoStoreProvider";
 import { playPop, unlockAudioContext } from "@/lib/sound";
-import { BRAND_LIST, BrandLogo } from "@/components/hippome/BrandLogo";
-import { HippomeMark } from "@/components/hippome/HippomeMark";
-import { HippomeAvatarSlot } from "@/components/hippome/HippomeAvatarSlot";
-import { Marquee, SplitText, Sticker } from "@/components/motion";
+import { BRAND_LIST, BrandLogo } from "@/components/mnemo/BrandLogo";
+import { MnemoMark } from "@/components/mnemo/MnemoMark";
+import { VoucherShowcase } from "@/components/mnemo/VoucherShowcase";
+import { Marquee, SplitText } from "@/components/motion";
 import { Badge, Button, ChevronRightIcon } from "@/components/ui";
 
 type AuthMode = "register" | "login";
-
-const TICKET_PREVIEW = [
-  { brand: "Mixue", value: "RM5", tier: "Beginner pass" },
-  { brand: "ZUS Coffee", value: "RM10", tier: "Intermediate pass" },
-  { brand: "CHAGEE", value: "RM20", tier: "Advanced pass" },
-  { brand: "TNG eWallet", value: "RM50", tier: "Level-up bonus" },
-] as const;
 
 export function AuthView() {
   const router = useRouter();
   const prefersReduced = useReducedMotion();
   const { isHydrated, activeUser, login, register, loginAsDemo } =
-    useHippomeStore();
+    useMnemoStore();
 
   const [mode, setMode] = useState<AuthMode>("register");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [activeTicket, setActiveTicket] = useState<number>(3);
 
   useEffect(() => {
     if (!isHydrated || !activeUser) return;
@@ -78,7 +70,7 @@ export function AuthView() {
     return (
       <main className="flex min-h-[100dvh] items-center justify-center bg-[var(--ground)] p-6">
         <p className="font-display text-lg font-bold text-[var(--muted)]">
-          Preparing Hippome...
+          Preparing Mnemo...
         </p>
       </main>
     );
@@ -87,70 +79,75 @@ export function AuthView() {
   return (
     <main className="grid min-h-[100dvh] w-full bg-[var(--ground)] lg:grid-cols-12">
       {/* Left Poster Showcase (Midnight Ink) */}
-      <section className="flex flex-col justify-between gap-8 border-b-2 border-[var(--ink-surface)] bg-[var(--ink-surface)] px-5 py-8 text-[var(--floral-white)] sm:px-8 lg:col-span-5 lg:border-r-2 lg:border-b-0 lg:px-10 lg:py-10">
+      <section className="flex flex-col justify-between gap-8 border-b-2 border-[var(--ink-surface)] bg-[var(--ink-surface)] px-5 py-8 text-[var(--floral-white)] sm:px-8 lg:col-span-6 lg:border-r-2 lg:border-b-0 lg:px-10 lg:py-10">
         <div className="space-y-6">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5">
-              <HippomeMark size={36} inverted />
-              <span className="font-display text-xl font-extrabold tracking-[-0.03em]">
-                HIPPOME
-              </span>
-            </div>
-            <Sticker tone="aqua" tilt={2}>
-              <span className="text-micro">Form 5 SPM</span>
-            </Sticker>
+          <div className="flex items-center gap-2.5">
+            <MnemoMark size={38} inverted />
+            <span className="font-display text-2xl font-extrabold tracking-[-0.03em]">
+              MNEMO
+            </span>
           </div>
 
-          <div className="flex flex-col items-start gap-5">
-            <HippomeAvatarSlot expression="happy" size="lg" floating onDark />
-            <div className="space-y-3">
-              <SplitText
-                text="Study. Win. Repeat."
-                by="word"
-                stagger={0.08}
-                className="text-display text-[var(--floral-white)]"
-              />
-              <p className="max-w-md text-sm font-medium leading-relaxed text-[#cfd6e8]">
-                Pass 5-question quizzes matched to your level in Sejarah, BM,
-                English, Maths, and Science to claim real Malaysian vouchers.
-              </p>
+          <div className="space-y-4">
+            <SplitText
+              text="Study. Win. Repeat."
+              by="word"
+              stagger={0.08}
+              className="text-display text-[var(--floral-white)]"
+            />
+            <p className="text-lg font-bold text-[#cfd6e8]">
+              Pass quick quizzes and claim
+            </p>
+            <div className="relative inline-flex items-center gap-3">
+              <motion.span
+                aria-hidden="true"
+                animate={
+                  prefersReduced
+                    ? undefined
+                    : { scale: [1, 1.3, 1], rotate: [0, 15, 0] }
+                }
+                transition={{ duration: 2, repeat: Infinity }}
+                className="text-2xl text-[var(--pearl-aqua)]"
+              >
+                ✦
+              </motion.span>
+              <motion.div
+                animate={
+                  prefersReduced ? undefined : { rotate: [-2, 2, -2] }
+                }
+                transition={{
+                  duration: 2.4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="inline-block"
+              >
+                <SplitText
+                  text="VOUCHERS!"
+                  by="char"
+                  stagger={0.045}
+                  className="font-display text-[3.5rem] font-extrabold leading-none tracking-[-0.04em] text-[var(--pearl-aqua)] text-fat sm:text-[4.75rem]"
+                />
+              </motion.div>
+              <motion.span
+                aria-hidden="true"
+                animate={
+                  prefersReduced
+                    ? undefined
+                    : { scale: [1, 1.3, 1], rotate: [0, -15, 0] }
+                }
+                transition={{ duration: 2.2, repeat: Infinity, delay: 0.4 }}
+                className="text-2xl text-[var(--periwinkle)]"
+              >
+                ✦
+              </motion.span>
             </div>
           </div>
         </div>
 
-        {/* Interactive Reward Preview */}
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            {TICKET_PREVIEW.map((ticket, idx) => {
-              const isSelected = activeTicket === idx;
-              return (
-                <button
-                  key={ticket.brand}
-                  type="button"
-                  onClick={() => setActiveTicket(idx)}
-                  onMouseEnter={() => setActiveTicket(idx)}
-                  className={`flex min-h-[82px] cursor-pointer flex-col justify-between rounded-[20px] border-2 p-3 text-left transition-transform duration-150 ${
-                    isSelected
-                      ? "-translate-y-1 border-[var(--pearl-aqua)] bg-[var(--ink-surface-raised)] shadow-[4px_4px_0_var(--pearl-aqua)]"
-                      : "border-[#2e3b5c] bg-[#212b45] hover:-translate-y-0.5"
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <BrandLogo brand={ticket.brand} size={26} wobble={false} />
-                    <span className="font-display num rounded-full bg-[var(--pearl-aqua)] px-2.5 py-0.5 text-xs font-extrabold text-[var(--ink-surface)]">
-                      {ticket.value}
-                    </span>
-                  </div>
-                  <div className="pt-1">
-                    <p className="truncate text-xs font-bold text-[var(--floral-white)]">
-                      {ticket.brand}
-                    </p>
-                    <p className="text-[11px] text-[#c3cce0]">{ticket.tier}</p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+        {/* Auto-Playing Static Voucher Carousel */}
+        <div className="space-y-6">
+          <VoucherShowcase />
 
           <div className="-mx-5 border-t border-[#2c3858] pt-4 sm:-mx-8 lg:-mx-10">
             <Marquee
@@ -158,9 +155,9 @@ export function AuthView() {
               items={BRAND_LIST.map((b) => (
                 <span
                   key={b}
-                  className="inline-flex items-center gap-2 text-xs font-bold text-[var(--lavender)]"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-[var(--lavender)]"
                 >
-                  <BrandLogo brand={b} size={22} wobble={false} />
+                  <BrandLogo brand={b} size={26} wobble={false} />
                   <span>{b}</span>
                 </span>
               ))}
@@ -170,7 +167,7 @@ export function AuthView() {
       </section>
 
       {/* Right Auth Column */}
-      <section className="flex flex-col justify-center px-5 py-8 sm:px-8 lg:col-span-7 lg:px-14 lg:py-10">
+      <section className="flex flex-col justify-center px-5 py-8 sm:px-8 lg:col-span-6 lg:px-14 lg:py-10">
         <div className="mx-auto w-full max-w-md space-y-6">
           <motion.div
             initial={prefersReduced ? false : { rotate: -1, y: 12, opacity: 0 }}
@@ -212,14 +209,12 @@ export function AuthView() {
 
             <div>
               <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em] text-[var(--text)]">
-                {mode === "register"
-                  ? "Create your Form 5 account"
-                  : "Sign in to your study pass"}
+                {mode === "register" ? "Create your account" : "Welcome back"}
               </h2>
               <p className="mt-1 text-sm text-[var(--muted)]">
                 {mode === "register"
-                  ? "First-time students meet Hippome for a quick tour before starting."
-                  : "Jump straight back to your subjects and voucher wallet."}
+                  ? "New here? Take a quick tour first."
+                  : "Sign in to continue your quizzes and vouchers."}
               </p>
             </div>
 
@@ -255,7 +250,7 @@ export function AuthView() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="student@spm.my"
+                  placeholder="student@mnemo.my"
                   className="min-h-[46px] w-full rounded-[14px] border-2 border-[var(--ink-surface)] bg-[var(--ground)] px-3.5 text-sm font-medium text-[var(--text)] placeholder:text-[var(--faint)]"
                 />
               </div>
@@ -277,13 +272,6 @@ export function AuthView() {
                 />
               </div>
 
-              {mode === "register" && (
-                <div className="flex items-center justify-between rounded-[14px] border-2 border-[var(--ink-surface)] bg-[var(--periwinkle-soft)] px-3.5 py-2.5 text-xs text-[var(--ink-surface)]">
-                  <span className="font-semibold">Exam track</span>
-                  <strong className="font-extrabold">Form 5 (SPM KSSM)</strong>
-                </div>
-              )}
-
               {error && (
                 <div
                   role="alert"
@@ -294,9 +282,7 @@ export function AuthView() {
               )}
 
               <Button type="submit" variant="aqua" fullWidth size="lg" magnetic>
-                {mode === "register"
-                  ? "Create Account & Meet Hippome"
-                  : "Sign In to Study Home"}
+                {mode === "register" ? "Create Account" : "Sign In"}
               </Button>
             </form>
           </motion.div>
@@ -305,7 +291,7 @@ export function AuthView() {
           <div className="sticker space-y-3 bg-[var(--raised)] p-5">
             <div className="flex items-center justify-between gap-2">
               <p className="font-display text-base font-bold text-[var(--text)]">
-                Instant demo profiles
+                Quick demo profiles
               </p>
               <Badge tone="info">Local preview</Badge>
             </div>
@@ -321,7 +307,7 @@ export function AuthView() {
                     Daniel Lim (New student)
                   </p>
                   <p className="text-xs text-[var(--muted)]">
-                    Starts at the Hippome intro and fresh diagnostics
+                    Starts with the Mnemo intro and fresh check-ups
                   </p>
                 </div>
                 <ChevronRightIcon className="h-4 w-4 shrink-0 text-[var(--ink-surface)]" />
@@ -337,7 +323,7 @@ export function AuthView() {
                     Aisyah Rahman (Returning student)
                   </p>
                   <p className="text-xs text-[var(--muted)]">
-                    Sejarah 2/3 passes, Maths Intermediate, 3 vouchers
+                    Sejarah 2/3 stamps, Maths Intermediate, 3 vouchers
                   </p>
                 </div>
                 <ChevronRightIcon className="h-4 w-4 shrink-0 text-[var(--ink-surface)]" />

@@ -10,11 +10,11 @@ interface StampTrackProps {
   rewardLabel?: string;
   compact?: boolean;
   animateLatest?: boolean;
+  tone?: "light" | "dark";
 }
 
 /**
- * Hippome's signature 3-Stamp Loyalty Pass.
- * Visually encodes quiz passes toward the RM30 / RM50 / RM100 level-up voucher.
+ * Mnemo's 3-Stamp Loyalty Pass toward a bonus voucher.
  */
 export function StampTrack({
   passedCount,
@@ -22,13 +22,17 @@ export function StampTrack({
   rewardLabel,
   compact = false,
   animateLatest = false,
+  tone = "light",
 }: StampTrackProps) {
   const prefersReduced = useReducedMotion();
   const safeCount = Math.max(0, Math.min(passedCount, targetCount));
   const slots = Array.from({ length: targetCount }, (_, i) => i);
 
+  const labelColor =
+    tone === "dark" ? "text-[var(--pearl-aqua)]" : "text-[var(--text)]";
+
   return (
-    <div className="flex flex-wrap items-center gap-2.5">
+    <div className="flex flex-wrap items-center gap-3">
       <div
         className="flex items-center gap-2"
         role="img"
@@ -75,8 +79,10 @@ export function StampTrack({
                   aria-hidden="true"
                   className={`block h-[3px] w-3.5 rounded-full ${
                     idx < safeCount - 1
-                      ? "bg-[var(--ink-surface)]"
-                      : "bg-[var(--border)]"
+                      ? "bg-[var(--pearl-aqua)]"
+                      : tone === "dark"
+                        ? "bg-[var(--floral-white)]/30"
+                        : "bg-[var(--border)]"
                   }`}
                 />
               )}
@@ -86,7 +92,7 @@ export function StampTrack({
       </div>
 
       {rewardLabel && (
-        <span className="num text-xs font-bold text-[var(--text)]">
+        <span className={`num text-sm font-extrabold ${labelColor}`}>
           {rewardLabel}
         </span>
       )}

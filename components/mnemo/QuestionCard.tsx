@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { Badge } from "@/components/ui";
+import { Badge, CheckIcon } from "@/components/ui";
 
 interface QuestionCardProps {
   questionNumber: number;
@@ -14,6 +14,7 @@ interface QuestionCardProps {
   tag?: string;
   hint?: string;
   reviewMode?: boolean;
+  revealCorrect?: boolean;
   correctIndex?: 0 | 1 | 2 | 3;
   explanation?: string;
 }
@@ -30,6 +31,7 @@ export function QuestionCard({
   tag,
   hint,
   reviewMode = false,
+  revealCorrect = false,
   correctIndex,
   explanation,
 }: QuestionCardProps) {
@@ -72,7 +74,7 @@ export function QuestionCard({
           const optionIndex = idx as 0 | 1 | 2 | 3;
           const isSelected = selectedIndex === optionIndex;
           const isRightOption =
-            reviewMode &&
+            (reviewMode || revealCorrect) &&
             correctIndex !== undefined &&
             optionIndex === correctIndex;
           const isWrongSelection =
@@ -97,6 +99,9 @@ export function QuestionCard({
           } else if (isSelected) {
             optionStyle =
               "border-[var(--ink-surface)] bg-[var(--ink-surface)] text-[var(--floral-white)] shadow-[4px_4px_0_var(--pearl-aqua)]";
+          } else if (revealCorrect && isRightOption) {
+            optionStyle =
+              "border-[var(--ink-surface)] bg-[var(--accent-soft)] text-[var(--ink-surface)] shadow-[3px_3px_0_var(--ink-surface)]";
           }
 
           return (
@@ -114,17 +119,17 @@ export function QuestionCard({
               animate={
                 isWrongSelection && !prefersReduced
                   ? { x: [0, -8, 8, -4, 0] }
-                  : isRightOption && !prefersReduced
+                  : reviewMode && isRightOption && !prefersReduced
                     ? { scale: [1, 1.02, 1] }
                     : undefined
               }
               transition={{ duration: 0.35 }}
-              className={`flex min-h-[56px] w-full items-start gap-3.5 rounded-[18px] border-2 px-4 py-3.5 text-left text-sm font-semibold sm:text-[15px] ${
+              className={`flex min-h-[56px] w-full items-center gap-3.5 rounded-[18px] border-2 px-4 py-3.5 text-left text-sm font-semibold sm:text-[15px] ${
                 reviewMode ? "cursor-default" : "cursor-pointer"
               } ${optionStyle}`}
             >
               <span
-                className={`font-display mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-[var(--ink-surface)] text-xs font-extrabold ${
+                className={`font-display flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-[var(--ink-surface)] text-xs font-extrabold ${
                   reviewMode
                     ? isRightOption
                       ? "bg-[var(--floral-white)] text-[var(--ink-surface)]"
@@ -138,7 +143,13 @@ export function QuestionCard({
               >
                 {OPTION_LETTERS[idx]}
               </span>
-              <span className="flex-1 pt-1 leading-snug">{option}</span>
+              <span className="flex-1 leading-snug">{option}</span>
+              {revealCorrect && !reviewMode && isRightOption && (
+                <Badge tone="success" className="shrink-0">
+                  <CheckIcon className="h-3.5 w-3.5" />
+                  <span>Correct answer</span>
+                </Badge>
+              )}
             </motion.button>
           );
         })}

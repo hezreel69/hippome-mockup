@@ -1,4 +1,4 @@
-import { DifficultyLevel, Question, SubjectId } from "@/types/hippome";
+import { DifficultyLevel, Question, SubjectId } from "@/types/mnemo";
 
 export type CompactQuestionTuple = [
   idSuffix: string,

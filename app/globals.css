@@ -57,6 +57,14 @@
   --pill-neutral-bg: #ece8f0;
   --pill-neutral-ink: #2c344a;
 
+  /* Level colours: outside the brand palette for clear contrast */
+  --level-beginner: #8fd694;
+  --level-beginner-ink: #0f3d1b;
+  --level-intermediate: #ffc857;
+  --level-intermediate-ink: #4a3000;
+  --level-advanced: #ff6b6b;
+  --level-advanced-ink: #4d0a0a;
+
   /* Geometry & Sticker Shadows */
   --radius-card: 20px;
   --radius-control: 10px;
@@ -115,28 +123,56 @@ body {
   font-family: var(--font-display), var(--font-manrope), system-ui, sans-serif;
 }
 
+.text-giga {
+  font-family: var(--font-display), var(--font-manrope), system-ui, sans-serif;
+  font-size: clamp(4.25rem, 14.5vw, 12.5rem);
+  font-weight: 800;
+  font-variation-settings: "opsz" 96;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  -webkit-text-stroke: 0.025em currentColor;
+  paint-order: stroke fill;
+}
+
 .text-mega {
   font-family: var(--font-display), var(--font-manrope), system-ui, sans-serif;
-  font-size: clamp(3.25rem, 11.5vw, 9.5rem);
+  font-size: clamp(3.5rem, 11.5vw, 9.5rem);
   font-weight: 800;
+  font-variation-settings: "opsz" 96;
   line-height: 0.88;
   letter-spacing: -0.04em;
+  -webkit-text-stroke: 0.022em currentColor;
+  paint-order: stroke fill;
 }
 
 .text-display {
   font-family: var(--font-display), var(--font-manrope), system-ui, sans-serif;
-  font-size: clamp(2.25rem, 7vw, 5.25rem);
-  font-weight: 700;
-  line-height: 0.94;
-  letter-spacing: -0.03em;
+  font-size: clamp(2.75rem, 8vw, 6.25rem);
+  font-weight: 800;
+  font-variation-settings: "opsz" 96;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  -webkit-text-stroke: 0.02em currentColor;
+  paint-order: stroke fill;
 }
 
 .text-heading {
   font-family: var(--font-display), var(--font-manrope), system-ui, sans-serif;
-  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-size: clamp(2rem, 4.8vw, 3.5rem);
+  font-weight: 800;
+  font-variation-settings: "opsz" 96;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  -webkit-text-stroke: 0.018em currentColor;
+  paint-order: stroke fill;
+}
+
+.text-eyebrow {
+  font-family: var(--font-display), var(--font-manrope), system-ui, sans-serif;
+  font-size: clamp(1rem, 2vw, 1.45rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .text-micro {
@@ -144,6 +180,11 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
+}
+
+.text-fat {
+  -webkit-text-stroke: 0.028em currentColor;
+  paint-order: stroke fill;
 }
 
 /* Sticker Surface */

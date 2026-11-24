@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { SPM_SUBJECTS, getSubjectById } from "@/data/subjects";
+import { SUBJECTS, getSubjectById } from "@/data/subjects";
 import { AssessmentView } from "@/components/features/AssessmentView";
 
 export function generateStaticParams() {
-  return SPM_SUBJECTS.map((subject) => ({
+  return SUBJECTS.map((subject) => ({
     subjectId: subject.id,
   }));
 }
@@ -25,7 +25,7 @@ export default async function SubjectAssessmentPage({
     <Suspense
       fallback={
         <div className="p-8 text-center text-sm text-[var(--muted)]">
-          Loading assessment...
+          Loading check-up...
         </div>
       }
     >

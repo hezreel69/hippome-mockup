@@ -12,23 +12,27 @@ import {
   QUIZZES_TO_LEVEL_UP,
   STORAGE_KEY,
 } from "@/lib/config";
-import { mintVoucherForTier } from "@/data/rewards";
-import { SPM_SUBJECTS } from "@/data/subjects";
+import {
+  getMilestoneRewardTemplate,
+  getQuizRewardTemplate,
+} from "@/data/reward-map";
+import { mintVoucherFromTemplate } from "@/data/rewards";
+import { SUBJECTS } from "@/data/subjects";
 import {
   DifficultyLevel,
-  HippomePersistedState,
+  MnemoPersistedState,
   QuizAttempt,
+  QuizMode,
   SubjectId,
   SubjectProgress,
   UserProfile,
   Voucher,
-} from "@/types/hippome";
+} from "@/types/mnemo";
 
 function createEmptySubjectProgress(subjectId: SubjectId): SubjectProgress {
   return {
     subjectId,
     level: null,
-    weakestTopicId: null,
     assessmentScore: null,
     assessmentTotal: null,
     assessmentCompletedAt: null,
@@ -39,7 +43,7 @@ function createEmptySubjectProgress(subjectId: SubjectId): SubjectProgress {
 }
 
 function createAllSubjectProgress(): Record<SubjectId, SubjectProgress> {
-  return SPM_SUBJECTS.reduce(
+  return SUBJECTS.reduce(
     (acc, subject) => {
       acc[subject.id] = createEmptySubjectProgress(subject.id);
       return acc;
@@ -60,7 +64,6 @@ function createDemoReturningUser(): UserProfile {
   progress.sejarah = {
     subjectId: "sejarah",
     level: "beginner",
-    weakestTopicId: "perlembagaan-persekutuan",
     assessmentScore: 2,
     assessmentTotal: 6,
     assessmentCompletedAt: isoDaysBeforeDemo(4),
@@ -71,7 +74,6 @@ function createDemoReturningUser(): UserProfile {
   progress.mathematics = {
     subjectId: "mathematics",
     level: "intermediate",
-    weakestTopicId: "matrices",
     assessmentScore: 4,
     assessmentTotal: 6,
     assessmentCompletedAt: isoDaysBeforeDemo(2),
@@ -83,17 +85,17 @@ function createDemoReturningUser(): UserProfile {
   const vouchers: Voucher[] = [
     {
       id: "demo_vch_1",
-      templateId: "beg-tng-5",
+      templateId: "beg-mixue-5",
       tier: "beginner",
-      brand: "TNG eWallet",
-      title: "TNG eWallet RM5 Reload PIN",
+      brand: "Mixue",
+      title: "Mixue RM5 Ice Cream & Tea Voucher",
       valueRm: 5,
-      description: "Instant RM5 credit top-up for Touch 'n Go eWallet.",
-      code: "TNG5-DEMO-8421",
+      description: "RM5 off any Mixue drink or sundae.",
+      code: "MIX5-DEMO-8421",
       isMilestone: false,
       earnedAt: isoDaysBeforeDemo(3),
       earnedFromSubjectId: "sejarah",
-      earnedFromTopicId: "kedaulatan-negara",
+      earnedFromQuizMode: "random",
       redeemedAt: isoDaysBeforeDemo(2),
     },
     {
@@ -103,12 +105,12 @@ function createDemoReturningUser(): UserProfile {
       brand: "Mixue",
       title: "Mixue RM5 Ice Cream & Tea Voucher",
       valueRm: 5,
-      description: "Redeem RM5 off any Mixue drink or sundae.",
+      description: "RM5 off any Mixue drink or sundae.",
       code: "MIX5-DEMO-3194",
       isMilestone: false,
       earnedAt: isoDaysBeforeDemo(2),
       earnedFromSubjectId: "sejarah",
-      earnedFromTopicId: "perlembagaan-persekutuan",
+      earnedFromQuizMode: "random",
       redeemedAt: null,
     },
     {
@@ -118,12 +120,12 @@ function createDemoReturningUser(): UserProfile {
       brand: "ZUS Coffee",
       title: "ZUS Coffee RM10 Drink Voucher",
       valueRm: 10,
-      description: "RM10 off any handcrafted ZUS Coffee beverage via app.",
+      description: "RM10 off any handcrafted ZUS Coffee drink.",
       code: "ZUS10-DEMO-5572",
       isMilestone: false,
       earnedAt: isoDaysBeforeDemo(1),
       earnedFromSubjectId: "mathematics",
-      earnedFromTopicId: "matrices",
+      earnedFromQuizMode: "random",
       redeemedAt: null,
     },
   ];
@@ -132,18 +134,12 @@ function createDemoReturningUser(): UserProfile {
     {
       id: "demo_attempt_1",
       subjectId: "sejarah",
-      topicId: "kedaulatan-negara",
+      quizMode: "random",
       level: "beginner",
       score: 4,
       totalQuestions: 5,
       passed: true,
-      questionIds: [
-        "sej-ked-beg-1",
-        "sej-ked-beg-2",
-        "sej-ked-beg-3",
-        "sej-ked-beg-4",
-        "sej-ked-beg-5",
-      ],
+      questionIds: ["sej-1", "sej-2", "sej-3", "sej-4", "sej-5"],
       rewardVoucherIds: ["demo_vch_1"],
       leveledUpTo: null,
       completedAt: isoDaysBeforeDemo(3),
@@ -151,18 +147,12 @@ function createDemoReturningUser(): UserProfile {
     {
       id: "demo_attempt_2",
       subjectId: "sejarah",
-      topicId: "perlembagaan-persekutuan",
+      quizMode: "random",
       level: "beginner",
       score: 2,
       totalQuestions: 5,
       passed: false,
-      questionIds: [
-        "sej-per-beg-1",
-        "sej-per-beg-2",
-        "sej-per-beg-3",
-        "sej-per-beg-4",
-        "sej-per-beg-5",
-      ],
+      questionIds: ["sej-6", "sej-7", "sej-8", "sej-9", "sej-10"],
       rewardVoucherIds: [],
       leveledUpTo: null,
       completedAt: isoDaysBeforeDemo(2.5),
@@ -170,18 +160,12 @@ function createDemoReturningUser(): UserProfile {
     {
       id: "demo_attempt_3",
       subjectId: "sejarah",
-      topicId: "perlembagaan-persekutuan",
+      quizMode: "random",
       level: "beginner",
       score: 4,
       totalQuestions: 5,
       passed: true,
-      questionIds: [
-        "sej-per-beg-6",
-        "sej-per-beg-7",
-        "sej-per-beg-8",
-        "sej-per-beg-9",
-        "sej-per-beg-10",
-      ],
+      questionIds: ["sej-11", "sej-12", "sej-13", "sej-14", "sej-15"],
       rewardVoucherIds: ["demo_vch_2"],
       leveledUpTo: null,
       completedAt: isoDaysBeforeDemo(2),
@@ -189,18 +173,12 @@ function createDemoReturningUser(): UserProfile {
     {
       id: "demo_attempt_4",
       subjectId: "mathematics",
-      topicId: "matrices",
+      quizMode: "random",
       level: "intermediate",
       score: 5,
       totalQuestions: 5,
       passed: true,
-      questionIds: [
-        "mat-mat-int-1",
-        "mat-mat-int-2",
-        "mat-mat-int-3",
-        "mat-mat-int-4",
-        "mat-mat-int-5",
-      ],
+      questionIds: ["mat-1", "mat-2", "mat-3", "mat-4", "mat-5"],
       rewardVoucherIds: ["demo_vch_3"],
       leveledUpTo: null,
       completedAt: isoDaysBeforeDemo(1),
@@ -210,9 +188,8 @@ function createDemoReturningUser(): UserProfile {
   return {
     id: "demo_returning_student",
     name: "Aisyah Rahman",
-    email: "aisyah@spm.my",
+    email: "aisyah@mnemo.my",
     password: "password123",
-    form: "Form 5",
     isDemo: true,
     hasCompletedOnboarding: true,
     createdAt: isoDaysBeforeDemo(5),
@@ -228,9 +205,8 @@ function createDemoNewUser(): UserProfile {
   return {
     id: "demo_new_student",
     name: "Daniel Lim",
-    email: "daniel@spm.my",
+    email: "daniel@mnemo.my",
     password: "password123",
-    form: "Form 5",
     isDemo: true,
     hasCompletedOnboarding: false,
     createdAt: DEMO_BASE_ISO,
@@ -242,7 +218,7 @@ function createDemoNewUser(): UserProfile {
   };
 }
 
-function buildInitialState(): HippomePersistedState {
+function buildInitialState(): MnemoPersistedState {
   const returningUser = createDemoReturningUser();
   const newUser = createDemoNewUser();
 
@@ -255,16 +231,16 @@ function buildInitialState(): HippomePersistedState {
   };
 }
 
-const SERVER_SNAPSHOT: HippomePersistedState = buildInitialState();
+const SERVER_SNAPSHOT: MnemoPersistedState = buildInitialState();
 
-let clientStateCache: HippomePersistedState | null = null;
+let clientStateCache: MnemoPersistedState | null = null;
 const storeListeners = new Set<() => void>();
 
 function emitStoreChange(): void {
   storeListeners.forEach((listener) => listener());
 }
 
-function readClientSnapshot(): HippomePersistedState {
+function readClientSnapshot(): MnemoPersistedState {
   if (typeof window === "undefined") {
     return SERVER_SNAPSHOT;
   }
@@ -276,7 +252,7 @@ function readClientSnapshot(): HippomePersistedState {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (raw) {
-      const parsed = JSON.parse(raw) as HippomePersistedState;
+      const parsed = JSON.parse(raw) as MnemoPersistedState;
       if (parsed && typeof parsed === "object" && parsed.users) {
         clientStateCache = parsed;
         return clientStateCache;
@@ -296,8 +272,8 @@ function readClientSnapshot(): HippomePersistedState {
 }
 
 function writeClientSnapshot(
-  updater: (prev: HippomePersistedState) => HippomePersistedState
-): HippomePersistedState {
+  updater: (prev: MnemoPersistedState) => MnemoPersistedState
+): MnemoPersistedState {
   const prev = readClientSnapshot();
   const next = updater(prev);
   clientStateCache = next;
@@ -352,7 +328,7 @@ export interface RecordQuizOutcome {
   milestoneGranted: boolean;
 }
 
-interface HippomeStoreContextValue {
+interface MnemoStoreContextValue {
   isHydrated: boolean;
   activeUser: UserProfile | null;
   register: (name: string, email: string, password: string) => AuthActionResult;
@@ -363,13 +339,12 @@ interface HippomeStoreContextValue {
   saveAssessmentResult: (params: {
     subjectId: SubjectId;
     level: DifficultyLevel;
-    weakestTopicId: string;
     score: number;
     total: number;
   }) => void;
   recordQuizAttempt: (params: {
     subjectId: SubjectId;
-    topicId: string;
+    quizMode: QuizMode;
     level: DifficultyLevel;
     score: number;
     totalQuestions: number;
@@ -380,19 +355,16 @@ interface HippomeStoreContextValue {
   resetAllData: () => void;
 }
 
-const HippomeStoreContext = createContext<HippomeStoreContextValue | null>(
-  null
-);
+const MnemoStoreContext = createContext<MnemoStoreContextValue | null>(null);
 
 export function makeQuestionPoolKey(
   subjectId: SubjectId,
-  topicId: string,
   level: DifficultyLevel
 ): string {
-  return `${subjectId}:${topicId}:${level}`;
+  return `${subjectId}:random:${level}`;
 }
 
-export function HippomeStoreProvider({
+export function MnemoStoreProvider({
   children,
 }: {
   children: React.ReactNode;
@@ -439,7 +411,6 @@ export function HippomeStoreProvider({
         name: cleanName,
         email: cleanEmail,
         password,
-        form: "Form 5",
         hasCompletedOnboarding: false,
         createdAt: new Date().toISOString(),
         subjectProgress: createAllSubjectProgress(),
@@ -529,7 +500,6 @@ export function HippomeStoreProvider({
     (params: {
       subjectId: SubjectId;
       level: DifficultyLevel;
-      weakestTopicId: string;
       score: number;
       total: number;
     }) => {
@@ -545,7 +515,6 @@ export function HippomeStoreProvider({
         const updatedSubject: SubjectProgress = {
           ...currentSubject,
           level: params.level,
-          weakestTopicId: params.weakestTopicId,
           assessmentScore: params.score,
           assessmentTotal: params.total,
           assessmentCompletedAt: new Date().toISOString(),
@@ -573,7 +542,7 @@ export function HippomeStoreProvider({
   const recordQuizAttempt = useCallback(
     (params: {
       subjectId: SubjectId;
-      topicId: string;
+      quizMode: QuizMode;
       level: DifficultyLevel;
       score: number;
       totalQuestions: number;
@@ -597,24 +566,31 @@ export function HippomeStoreProvider({
       let nextLevel: DifficultyLevel = subjectProg.level ?? params.level;
 
       if (params.passed) {
-        const quizVoucher = mintVoucherForTier({
-          tier: params.level,
-          subjectId: params.subjectId,
-          topicId: params.topicId,
-        });
-        grantedVouchers.push(quizVoucher);
+        const quizTemplate = getQuizRewardTemplate(
+          params.subjectId,
+          params.level
+        );
+        grantedVouchers.push(
+          mintVoucherFromTemplate(quizTemplate, {
+            subjectId: params.subjectId,
+            quizMode: params.quizMode,
+          })
+        );
 
         nextQuizzesAtLevel += 1;
 
         if (nextQuizzesAtLevel >= QUIZZES_TO_LEVEL_UP) {
           const milestoneCfg = MILESTONE_REWARD_CONFIG[params.level];
-          const milestoneVoucher = mintVoucherForTier({
-            tier: milestoneCfg.tier,
-            subjectId: params.subjectId,
-            topicId: params.topicId,
-            seedOffset: currentUser.vouchers.length + 1,
-          });
-          grantedVouchers.push(milestoneVoucher);
+          const milestoneTemplate = getMilestoneRewardTemplate(
+            params.subjectId,
+            params.level
+          );
+          grantedVouchers.push(
+            mintVoucherFromTemplate(milestoneTemplate, {
+              subjectId: params.subjectId,
+              quizMode: params.quizMode,
+            })
+          );
           milestoneGranted = true;
           nextQuizzesAtLevel = 0;
 
@@ -630,7 +606,7 @@ export function HippomeStoreProvider({
       const attempt: QuizAttempt = {
         id: `att_${Date.now()}`,
         subjectId: params.subjectId,
-        topicId: params.topicId,
+        quizMode: params.quizMode,
         level: params.level,
         score: params.score,
         totalQuestions: params.totalQuestions,
@@ -641,11 +617,7 @@ export function HippomeStoreProvider({
         completedAt: new Date().toISOString(),
       };
 
-      const poolKey = makeQuestionPoolKey(
-        params.subjectId,
-        params.topicId,
-        params.level
-      );
+      const poolKey = makeQuestionPoolKey(params.subjectId, params.level);
 
       writeClientSnapshot((prev) => {
         if (!prev.activeUserId) return prev;
@@ -656,11 +628,6 @@ export function HippomeStoreProvider({
           user.subjectProgress[params.subjectId] ??
           createEmptySubjectProgress(params.subjectId);
 
-        const prevSeen = user.seenQuestionIdsByKey[poolKey] ?? [];
-        const mergedSeen = Array.from(
-          new Set([...prevSeen, ...params.questionIds])
-        );
-
         const updatedSubject: SubjectProgress = {
           ...existingProg,
           level: nextLevel,
@@ -669,6 +636,24 @@ export function HippomeStoreProvider({
           totalQuizzesPassed:
             existingProg.totalQuizzesPassed + (params.passed ? 1 : 0),
         };
+
+        let nextSeenMap = user.seenQuestionIdsByKey;
+        let nextLastMap = user.lastAttemptQuestionIdsByKey;
+
+        if (params.quizMode === "random") {
+          const prevSeen = user.seenQuestionIdsByKey[poolKey] ?? [];
+          const mergedSeen = Array.from(
+            new Set([...prevSeen, ...params.questionIds])
+          );
+          nextSeenMap = {
+            ...user.seenQuestionIdsByKey,
+            [poolKey]: mergedSeen,
+          };
+          nextLastMap = {
+            ...user.lastAttemptQuestionIdsByKey,
+            [poolKey]: params.questionIds,
+          };
+        }
 
         return {
           ...prev,
@@ -682,14 +667,8 @@ export function HippomeStoreProvider({
               },
               quizHistory: [attempt, ...user.quizHistory],
               vouchers: [...grantedVouchers, ...user.vouchers],
-              seenQuestionIdsByKey: {
-                ...user.seenQuestionIdsByKey,
-                [poolKey]: mergedSeen,
-              },
-              lastAttemptQuestionIdsByKey: {
-                ...user.lastAttemptQuestionIdsByKey,
-                [poolKey]: params.questionIds,
-              },
+              seenQuestionIdsByKey: nextSeenMap,
+              lastAttemptQuestionIdsByKey: nextLastMap,
             },
           },
         };
@@ -734,7 +713,7 @@ export function HippomeStoreProvider({
     writeClientSnapshot(() => buildInitialState());
   }, []);
 
-  const value = useMemo<HippomeStoreContextValue>(
+  const value = useMemo<MnemoStoreContextValue>(
     () => ({
       isHydrated,
       activeUser,
@@ -764,17 +743,17 @@ export function HippomeStoreProvider({
   );
 
   return (
-    <HippomeStoreContext.Provider value={value}>
+    <MnemoStoreContext.Provider value={value}>
       {children}
-    </HippomeStoreContext.Provider>
+    </MnemoStoreContext.Provider>
   );
 }
 
-export function useHippomeStore(): HippomeStoreContextValue {
-  const ctx = useContext(HippomeStoreContext);
+export function useMnemoStore(): MnemoStoreContextValue {
+  const ctx = useContext(MnemoStoreContext);
   if (!ctx) {
     throw new Error(
-      "useHippomeStore must be used inside a <HippomeStoreProvider>"
+      "useMnemoStore must be used inside a <MnemoStoreProvider>"
     );
   }
   return ctx;

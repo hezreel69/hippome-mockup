@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Manrope } from "next/font/google";
-import { HippomeStoreProvider } from "@/context/HippomeStoreProvider";
+import { MnemoStoreProvider } from "@/context/MnemoStoreProvider";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -18,9 +18,9 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "Hippome | Form 5 SPM Quiz & Voucher Wallet",
+  title: "Mnemo | Quizzes & Voucher Wallet",
   description:
-    "Form 5 SPM quizzes matched to your level with real-life Malaysian student vouchers from TNG eWallet, ZUS Coffee, CHAGEE, Mixue, and 7-Eleven.",
+    "Quick quizzes matched to your level with vouchers from TNG eWallet, ZUS Coffee, CHAGEE, Mixue, and 7-Eleven.",
 };
 
 export const viewport: Viewport = {
@@ -37,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${manrope.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="grain min-h-full flex flex-col bg-[var(--ground)] text-[var(--text)]">
-        <HippomeStoreProvider>{children}</HippomeStoreProvider>
+        <MnemoStoreProvider>{children}</MnemoStoreProvider>
       </body>
     </html>
   );

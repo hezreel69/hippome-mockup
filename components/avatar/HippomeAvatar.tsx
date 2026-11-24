@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { HippomeExpression } from "@/lib/avatar-config";
 import { unlockAudioContext } from "@/lib/sound";
-import { HippomeAvatarSlot } from "@/components/hippome/HippomeAvatarSlot";
+import { HippomeAvatarSlot } from "@/components/avatar/HippomeAvatarSlot";
 import { SplitText } from "@/components/motion";
 
 export type { HippomeExpression };
@@ -24,7 +24,7 @@ interface HippomeAvatarProps {
 
 export function HippomeAvatar({
   message,
-  speakerLabel = "Hippome Tutor",
+  speakerLabel = "Hippome",
   expression = "happy",
   compact = false,
   floating = false,
