@@ -6,7 +6,8 @@ import { motion, useReducedMotion } from "motion/react";
 import { useMnemoStore } from "@/context/MnemoStoreProvider";
 import { playPop, unlockAudioContext } from "@/lib/sound";
 import { BRAND_LIST, BrandLogo } from "@/components/mnemo/BrandLogo";
-import { MnemoMark } from "@/components/mnemo/MnemoMark";
+import { HippomeAvatarSlot } from "@/components/avatar/HippomeAvatarSlot";
+import { HIPPOME_AVATAR_CONFIG } from "@/lib/avatar-config";
 import { VoucherShowcase } from "@/components/mnemo/VoucherShowcase";
 import { Marquee, SplitText } from "@/components/motion";
 import { Badge, Button, ChevronRightIcon } from "@/components/ui";
@@ -81,10 +82,16 @@ export function AuthView() {
       {/* Left Poster Showcase (Midnight Ink) */}
       <section className="flex min-w-0 flex-col justify-between gap-6 overflow-hidden border-b-2 border-[var(--ink-surface)] bg-[var(--ink-surface)] px-4 py-6 text-[var(--floral-white)] sm:px-8 sm:py-8 lg:col-span-6 lg:gap-8 lg:border-r-2 lg:border-b-0 lg:px-10 lg:py-10">
         <div className="space-y-5 sm:space-y-6">
-          <div className="flex items-center gap-2.5">
-            <MnemoMark size={38} inverted />
-            <span className="font-display text-2xl font-extrabold tracking-[-0.03em]">
-              MNEMO
+          <div className="flex items-center gap-3">
+            <HippomeAvatarSlot
+              expression="happy"
+              size="md"
+              srcOverride={HIPPOME_AVATAR_CONFIG.welcomeSrc}
+              frameless
+              onDark
+            />
+            <span className="mnemo-wordmark-sm text-3xl font-extrabold tracking-[-0.02em] sm:text-4xl">
+              Mnemo
             </span>
           </div>
 
