@@ -160,11 +160,11 @@ export function AppShell({
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 lg:gap-6 lg:px-6 lg:py-3.5">
           <Link href="/dashboard" className="flex items-center gap-3">
             <MnemoMark size={44} inverted />
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center text-center">
               <span className="mnemo-wordmark-sm text-2xl font-extrabold tracking-[-0.02em] lg:text-[28px]">
                 Mnemo
               </span>
-              <span className="font-slopes text-xs leading-snug text-[#92d7f2] lg:text-sm">
+              <span className="font-slopes text-base leading-snug text-[#92d7f2] lg:text-lg">
                 Education is key!
               </span>
             </div>
@@ -285,11 +285,11 @@ export function AppShell({
       <header className="sticky top-0 z-30 flex items-center justify-between gap-2 border-b-2 border-[var(--ink-surface-raised)] bg-[var(--ink-surface)] px-3.5 py-2.5 text-[var(--floral-white)] md:hidden">
         <Link href="/dashboard" className="flex min-w-0 items-center gap-2">
           <MnemoMark size={34} inverted />
-          <div className="flex min-w-0 flex-col">
+          <div className="flex min-w-0 flex-col items-center text-center">
             <span className="mnemo-wordmark-sm text-xl font-extrabold tracking-[-0.02em]">
               Mnemo
             </span>
-            <span className="font-slopes text-[11px] leading-snug text-[#92d7f2]">
+            <span className="font-slopes text-sm leading-snug text-[#92d7f2]">
               Education is key!
             </span>
           </div>
