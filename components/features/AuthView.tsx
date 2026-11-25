@@ -90,9 +90,14 @@ export function AuthView() {
               frameless
               onDark
             />
-            <span className="mnemo-wordmark-sm text-3xl font-extrabold tracking-[-0.02em] sm:text-4xl">
-              Mnemo
-            </span>
+            <div className="flex flex-col">
+              <span className="mnemo-wordmark-sm text-3xl font-extrabold tracking-[-0.02em] sm:text-4xl">
+                Mnemo
+              </span>
+              <span className="font-slopes text-xs leading-snug text-[#92d7f2] sm:text-sm">
+                Education is key!
+              </span>
+            </div>
           </div>
 
           <div className="space-y-3 sm:space-y-4">
