@@ -10,6 +10,7 @@ interface SplitTextProps {
   stagger?: number;
   delay?: number;
   className?: string;
+  wordClassName?: (unit: string, idx: number) => string;
 }
 
 export function SplitText({
@@ -19,30 +20,45 @@ export function SplitText({
   stagger = 0.045,
   delay = 0,
   className = "",
+  wordClassName,
 }: SplitTextProps) {
   const prefersReduced = useReducedMotion();
   const Tag = as;
+  const units = by === "char" ? Array.from(text) : text.split(" ");
 
   if (prefersReduced) {
-    return <Tag className={className}>{text}</Tag>;
+    if (!wordClassName) {
+      return <Tag className={className}>{text}</Tag>;
+    }
+    return (
+      <Tag className={className}>
+        {units.map((unit, idx) => (
+          <React.Fragment key={`${idx}-${unit}`}>
+            <span className={wordClassName(unit, idx)}>
+              {unit === " " ? "\u00A0" : unit}
+            </span>
+            {by === "word" && idx < units.length - 1 ? "\u00A0" : null}
+          </React.Fragment>
+        ))}
+      </Tag>
+    );
   }
-
-  const units = by === "char" ? Array.from(text) : text.split(" ");
 
   return (
     <Tag className={className} aria-label={text}>
       {units.map((unit, idx) => {
         const isSpace = unit === " ";
+        const customUnitClass = wordClassName ? wordClassName(unit, idx) : "";
         return (
           <span
             key={`${idx}-${unit}`}
             aria-hidden="true"
-            className="inline-block overflow-hidden align-bottom"
+            className="inline-block align-bottom"
           >
             <motion.span
-              className="inline-block will-change-transform"
-              initial={{ y: "110%", rotate: 6, opacity: 0 }}
-              animate={{ y: "0%", rotate: 0, opacity: 1 }}
+              className={`inline-block will-change-transform ${customUnitClass}`}
+              initial={{ y: 14, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
               transition={{
                 type: "spring",
                 stiffness: 260,

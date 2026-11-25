@@ -1,24 +1,12 @@
-# Hippome Avatar Asset Folder
+# Mnemo Custom Image Assets
 
-Drop your custom Hippome mascot artwork here to replace the built-in animated SVG hippo across the entire app (Auth, Onboarding, Dashboard Coach, Diagnostic Assessment, and Quiz Results).
+Mnemo uses 3 custom PNG files:
 
-## Quick Swap (1 Image — Static Mode)
+1. **Welcome Page Hippo Head**: `public/avatars/hippome.png`
+   - Shown on Onboarding Slide 1 directly below `"Mnemo"`.
+2. **Header Logo, Site-Wide Avatar & Quiz Pass**: `public/logo.png`
+   - Used in the main header, every site-wide avatar, and the Quiz Pass result screen.
+3. **Quiz Fail Result**: `public/logo-fail.png`
+   - Shown on the Quiz Fail result screen.
 
-1. Save your avatar image as:
-   `mockup/public/avatars/hippome.png`
-   *(Recommended: `512x512` PNG, WebP, or SVG with a transparent background.)*
-2. Open `mockup/lib/avatar-config.ts` and change:
-   ```ts
-   useCustomImage: true,
-   ```
-   When `useCustomImage` is `true`, the image renders as a static PNG with **no avatar animation** (no talking mouth, blink, breathe, or wiggle). Set `useCustomImage: false` to use the built-in animated SVG mascot.
-
-## Optional Per-Mood Artwork
-
-If you want different expressions for each moment, add separate files here and point `byExpression` in `mockup/lib/avatar-config.ts` to them:
-
-- `hippome-neutral.png`
-- `hippome-happy.png`
-- `hippome-thinking.png`
-- `hippome-celebrating.png`
-- `hippome-encouraging.png`
+Until any of these files are added, the app automatically falls back to the built-in SVG monogram / mascot.

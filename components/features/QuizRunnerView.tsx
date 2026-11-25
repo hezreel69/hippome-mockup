@@ -22,6 +22,7 @@ import {
   getDemoQuiz,
 } from "@/lib/mock-ai";
 import { playPop } from "@/lib/sound";
+import { HIPPOME_AVATAR_CONFIG } from "@/lib/avatar-config";
 import { AppShell } from "@/components/mnemo/AppShell";
 import { BrandLogo } from "@/components/mnemo/BrandLogo";
 import { HippomeAvatar } from "@/components/avatar/HippomeAvatar";
@@ -250,7 +251,11 @@ export function QuizRunnerView({
       <div
         className={`min-h-[100dvh] transition-colors duration-500 ${stageBgClass}`}
       >
-        <div className="relative mx-auto max-w-3xl space-y-6 px-5 py-8 sm:px-8">
+        <div
+          className={`relative mx-auto max-w-3xl space-y-6 px-4 py-6 sm:px-8 sm:py-8 ${
+            stage === "taking" ? "pb-24 sm:pb-8" : ""
+          }`}
+        >
           {/* Top Header */}
           <header className="flex flex-wrap items-start justify-between gap-3">
             <div className="space-y-2">
@@ -328,8 +333,8 @@ export function QuizRunnerView({
               />
 
               {/* Stepper Pills */}
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                   {quizPayload.questions.map((q, idx) => {
                     const isAnswered = answers[idx] !== null;
                     const isCurrent = idx === currentIndex;
@@ -341,7 +346,7 @@ export function QuizRunnerView({
                           setDirection(idx >= currentIndex ? "next" : "prev");
                           setCurrentIndex(idx);
                         }}
-                        className={`num pressable h-10 w-10 cursor-pointer rounded-full border-2 text-xs font-extrabold ${
+                        className={`num pressable h-9 w-9 cursor-pointer rounded-full border-2 text-xs font-extrabold sm:h-10 sm:w-10 ${
                           isCurrent
                             ? "border-[var(--ink-surface)] bg-[var(--ink-surface)] text-[var(--floral-white)]"
                             : isAnswered
@@ -449,6 +454,12 @@ export function QuizRunnerView({
               <HippomeAvatar
                 expression={
                   outcome.attempt.passed ? "celebrating" : "encouraging"
+                }
+                avatarSize="lg"
+                avatarSrc={
+                  outcome.attempt.passed
+                    ? HIPPOME_AVATAR_CONFIG.defaultSrc
+                    : HIPPOME_AVATAR_CONFIG.failSrc
                 }
                 floating={outcome.attempt.passed}
                 message={

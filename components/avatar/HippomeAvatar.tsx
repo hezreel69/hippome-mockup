@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { HippomeExpression } from "@/lib/avatar-config";
 import { unlockAudioContext } from "@/lib/sound";
-import { HippomeAvatarSlot } from "@/components/avatar/HippomeAvatarSlot";
+import { AvatarSize, HippomeAvatarSlot } from "@/components/avatar/HippomeAvatarSlot";
 import { SplitText } from "@/components/motion";
 
 export type { HippomeExpression };
@@ -12,6 +12,8 @@ interface HippomeAvatarProps {
   message: string;
   speakerLabel?: string;
   expression?: HippomeExpression;
+  avatarSize?: AvatarSize;
+  avatarSrc?: string;
   typewriter?: boolean;
   typingSpeedMs?: number;
   soundEnabledByDefault?: boolean;
@@ -26,6 +28,8 @@ export function HippomeAvatar({
   message,
   speakerLabel = "Hippome",
   expression = "happy",
+  avatarSize,
+  avatarSrc,
   compact = false,
   floating = false,
   hidePortrait = false,
@@ -37,15 +41,16 @@ export function HippomeAvatar({
 
   return (
     <div
-      className={`sticker flex items-start gap-4 bg-[var(--surface)] ${
-        compact ? "p-4" : "p-5"
+      className={`sticker flex items-start gap-3 sm:gap-4 bg-[var(--surface)] ${
+        compact ? "p-3.5 sm:p-4" : "p-4 sm:p-5"
       }`}
       onClick={unlockAudioContext}
     >
       {!hidePortrait && (
         <HippomeAvatarSlot
           expression={expression}
-          size={compact ? "sm" : "md"}
+          size={avatarSize ?? (compact ? "sm" : "md")}
+          srcOverride={avatarSrc}
           floating={floating}
         />
       )}

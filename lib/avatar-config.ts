@@ -6,19 +6,22 @@ export type HippomeExpression =
   | "encouraging";
 
 /**
- * Set `useCustomImage: true` to use a static PNG from `mockup/public/avatars/`
- * with no animation (disables talking mouth, blink, breathe, and wiggle).
- * Keep `false` (default) to use the built-in animated SVG mascot.
+ * 3-PNG custom asset configuration:
+ * 1. `welcomeSrc`: `/avatars/hippome.png` (Onboarding Slide 1 hero hippo head)
+ * 2. `defaultSrc`: `/logo.png` (Header logo, site-wide avatar & Quiz Pass result)
+ * 3. `failSrc`: `/logo-fail.png` (Quiz Fail result)
  */
 export const HIPPOME_AVATAR_CONFIG = {
-  useCustomImage: false,
-  defaultSrc: "/avatars/hippome.png",
+  useCustomImage: true,
+  welcomeSrc: "/avatars/hippome.png",
+  defaultSrc: "/logo.png",
+  failSrc: "/logo-fail.png",
   alt: "Hippome mascot avatar",
   byExpression: {
-    neutral: "/avatars/hippome.png",
-    happy: "/avatars/hippome.png",
-    thinking: "/avatars/hippome.png",
-    celebrating: "/avatars/hippome.png",
-    encouraging: "/avatars/hippome.png",
+    neutral: "/logo.png",
+    happy: "/logo.png",
+    thinking: "/logo.png",
+    celebrating: "/logo.png",
+    encouraging: "/logo.png",
   } satisfies Record<HippomeExpression, string>,
 };

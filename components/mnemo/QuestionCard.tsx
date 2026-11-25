@@ -43,7 +43,7 @@ export function QuestionCard({
     selectedIndex === correctIndex;
 
   return (
-    <div className="sticker space-y-5 bg-[var(--surface)] p-5 sm:p-7">
+    <div className="sticker space-y-4 bg-[var(--surface)] p-4 sm:space-y-5 sm:p-7">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="num text-micro text-[var(--muted)]">
           Question {questionNumber} of {totalQuestions}
@@ -124,7 +124,7 @@ export function QuestionCard({
                     : undefined
               }
               transition={{ duration: 0.35 }}
-              className={`flex min-h-[56px] w-full items-center gap-3.5 rounded-[18px] border-2 px-4 py-3.5 text-left text-sm font-semibold sm:text-[15px] ${
+              className={`flex min-h-[56px] w-full flex-wrap items-center gap-3 rounded-[18px] border-2 px-3.5 py-3 text-left text-sm font-semibold sm:flex-nowrap sm:gap-3.5 sm:px-4 sm:py-3.5 sm:text-[15px] ${
                 reviewMode ? "cursor-default" : "cursor-pointer"
               } ${optionStyle}`}
             >

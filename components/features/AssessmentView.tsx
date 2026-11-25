@@ -124,7 +124,11 @@ export function AssessmentView({ subjectId }: { subjectId: SubjectId }) {
 
   return (
     <AppShell pageTitle={`${subject.name} Check-up`} focusMode>
-      <div className="mx-auto max-w-3xl space-y-6 px-5 py-8 sm:px-8">
+      <div
+        className={`mx-auto max-w-3xl space-y-6 px-4 py-6 sm:px-8 sm:py-8 ${
+          stage === "taking" ? "pb-24 sm:pb-8" : ""
+        }`}
+      >
         {/* Header */}
         <header className="flex flex-wrap items-center justify-between gap-3">
           <div className="space-y-1.5">

@@ -82,7 +82,7 @@ export function DashboardView() {
   return (
     <AppShell pageTitle="Mnemo">
       {/* 1. HERO STAGE (Floral White, Full-Bleed) */}
-      <section className="relative overflow-hidden bg-[var(--ground)] px-5 pt-10 pb-16 sm:px-8 sm:pt-14 sm:pb-24">
+      <section className="relative overflow-hidden bg-[var(--ground)] px-4 pt-8 pb-12 sm:px-8 sm:pt-14 sm:pb-24">
         <Blob
           color="aqua"
           size={440}
@@ -116,8 +116,8 @@ export function DashboardView() {
               </div>
 
               <div>
-                <Link href={coachActionHref}>
-                  <Button variant="aqua" size="xl" magnetic>
+                <Link href={coachActionHref} className="inline-block w-full sm:w-auto">
+                  <Button variant="aqua" size="lg" fullWidth magnetic className="sm:min-h-[64px] sm:px-8 sm:text-xl sm:w-auto">
                     <span>{coachActionLabel}</span>
                     <ChevronRightIcon className="h-5 w-5" />
                   </Button>
@@ -133,10 +133,10 @@ export function DashboardView() {
       </section>
 
       {/* 2. WALLET STRIP (Midnight Ink Block) */}
-      <section className="relative border-y-2 border-[var(--ink-surface)] bg-[var(--ink-surface)] py-16 text-[var(--floral-white)] sm:py-24">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+      <section className="relative border-y-2 border-[var(--ink-surface)] bg-[var(--ink-surface)] py-12 text-[var(--floral-white)] sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-8">
           <Reveal>
-            <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+            <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end lg:gap-8">
               <div>
                 <p className="text-eyebrow text-[var(--pearl-aqua)]">
                   Vouchers earned
@@ -144,24 +144,24 @@ export function DashboardView() {
                 <div className="font-display text-giga mt-2 text-[var(--pearl-aqua)]">
                   <RollingNumber value={`${activeUser.vouchers.length}`} />
                 </div>
-                <p className="mt-3 text-xl font-extrabold text-[var(--lavender)]">
+                <p className="mt-2 text-lg font-extrabold text-[var(--lavender)] sm:mt-3 sm:text-xl">
                   {activeUser.vouchers.length === 1 ? "voucher" : "vouchers"} in
                   your wallet
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-5">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-5">
                 <Sticker
                   tone="periwinkle"
                   tilt={-2.5}
-                  className="px-6 py-3"
+                  className="px-4 py-2 sm:px-6 sm:py-3"
                 >
-                  <span className="num font-display text-2xl font-extrabold">
+                  <span className="num font-display text-lg font-extrabold sm:text-2xl">
                     {availableVouchers.length} ready to use
                   </span>
                 </Sticker>
                 <Link href="/rewards">
-                  <Button variant="aqua" size="xl" magnetic>
+                  <Button variant="aqua" size="lg" magnetic className="sm:min-h-[64px] sm:px-8 sm:text-xl">
                     <span>Open Wallet</span>
                     <ChevronRightIcon className="h-5 w-5" />
                   </Button>
@@ -172,16 +172,16 @@ export function DashboardView() {
         </div>
 
         {/* Brand Marquee */}
-        <div className="mt-14 border-t-2 border-[#2c3858] pt-10">
+        <div className="mt-10 border-t-2 border-[#2c3858] pt-8 sm:mt-14 sm:pt-10">
           <Marquee
             speed={28}
             items={BRAND_LIST.map((brand) => (
               <div
                 key={brand}
-                className="inline-flex items-center gap-3.5 rounded-full border-2 border-[var(--pearl-aqua)]/50 bg-[var(--ink-surface-raised)] px-6 py-3"
+                className="inline-flex items-center gap-2.5 rounded-full border-2 border-[var(--pearl-aqua)]/50 bg-[var(--ink-surface-raised)] px-4 py-2 sm:gap-3.5 sm:px-6 sm:py-3"
               >
-                <BrandLogo brand={brand} size={44} wobble={false} />
-                <span className="font-display text-xl font-extrabold text-[var(--floral-white)]">
+                <BrandLogo brand={brand} size={34} className="sm:h-[44px] sm:w-[44px]" wobble={false} />
+                <span className="font-display text-base font-extrabold text-[var(--floral-white)] sm:text-xl">
                   {brand}
                 </span>
               </div>
@@ -191,8 +191,8 @@ export function DashboardView() {
       </section>
 
       {/* 3. SUBJECTS STAGE (Periwinkle Block) */}
-      <section className="relative overflow-hidden border-b-2 border-[var(--ink-surface)] bg-[var(--periwinkle)] py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+      <section className="relative overflow-hidden border-b-2 border-[var(--ink-surface)] bg-[var(--periwinkle)] py-12 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-8">
           <Reveal>
             <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -226,13 +226,13 @@ export function DashboardView() {
 
       {/* 4. LATEST VOUCHERS & TIMELINE RIBBON (Floral White) */}
       <section
-        className="bg-[var(--ground)] py-16 sm:py-24"
+        className="bg-[var(--ground)] py-12 sm:py-20 lg:py-24"
         style={{ "--ticket-bg": "var(--ground)" } as React.CSSProperties}
       >
-        <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-8 lg:grid-cols-12">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:gap-12 sm:px-8 lg:grid-cols-12">
           {/* Latest Vouchers */}
           <div className="space-y-6 lg:col-span-6">
-            <div className="flex items-end justify-between gap-3">
+            <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
                 <p className="text-eyebrow text-[var(--muted)]">Your stash</p>
                 <h2 className="text-display mt-1 text-[var(--text)]">
@@ -293,17 +293,17 @@ export function DashboardView() {
                   return (
                     <Reveal key={attempt.id} delay={idx * 0.05}>
                       <div
-                        className="sticker flex items-center justify-between gap-4 bg-[var(--surface)] px-6 py-5"
+                        className="sticker flex items-center justify-between gap-3 bg-[var(--surface)] px-4 py-4 sm:gap-4 sm:px-6 sm:py-5"
                         style={{
                           transform: `rotate(${idx % 2 === 0 ? -0.6 : 0.6}deg)`,
                         }}
                       >
                         <div className="min-w-0 space-y-1">
-                          <p className="font-display truncate text-2xl font-extrabold text-[var(--text)]">
+                          <p className="font-display truncate text-lg font-extrabold text-[var(--text)] sm:text-2xl">
                             {subj?.name ?? attempt.subjectId}
                           </p>
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-sm font-bold text-[var(--muted)]">
+                            <span className="text-xs font-bold text-[var(--muted)] sm:text-sm">
                               {attempt.quizMode === "demo"
                                 ? "Demo Quiz"
                                 : "Random Quiz"}
@@ -314,8 +314,8 @@ export function DashboardView() {
                           </div>
                         </div>
 
-                        <div className="flex shrink-0 items-center gap-3">
-                          <span className="font-display num text-4xl font-extrabold text-[var(--text)]">
+                        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+                          <span className="font-display num text-2xl font-extrabold text-[var(--text)] sm:text-4xl">
                             {attempt.score}/{attempt.totalQuestions}
                           </span>
                           <Badge tone={attempt.passed ? "success" : "highlight"}>

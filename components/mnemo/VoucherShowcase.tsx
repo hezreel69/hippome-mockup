@@ -57,11 +57,11 @@ export function VoucherShowcase() {
 
   return (
     <div
-      className="pointer-events-none select-none space-y-4"
+      className="pointer-events-none min-w-0 w-full select-none space-y-3 sm:space-y-4"
       aria-label="Sample vouchers you can win"
       style={{ "--ticket-bg": "var(--ink-surface)" } as React.CSSProperties}
     >
-      <div className="relative min-h-[250px] w-full max-w-xl overflow-hidden">
+      <div className="relative min-h-[175px] w-full max-w-xl overflow-hidden sm:min-h-[250px]">
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
             key={slide.brand}
@@ -81,27 +81,32 @@ export function VoucherShowcase() {
                 : { x: -80, opacity: 0, rotate: -3 }
             }
             transition={{ type: "spring", stiffness: 240, damping: 24 }}
-            className={`voucher-ticket w-full rounded-[28px] border-2 border-[var(--ink-surface)] p-7 text-[var(--ink-surface)] shadow-[6px_6px_0_var(--pearl-aqua)] sm:p-8 ${slide.bg}`}
+            className={`voucher-ticket w-full rounded-[24px] border-2 border-[var(--ink-surface)] p-4 text-[var(--ink-surface)] shadow-[6px_6px_0_var(--pearl-aqua)] sm:rounded-[28px] sm:p-8 ${slide.bg}`}
           >
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <BrandLogo brand={slide.brand} size={84} wobble={false} />
-                <div>
-                  <p className="font-display text-2xl font-extrabold leading-tight sm:text-3xl">
+            <div className="flex items-center justify-between gap-2.5 sm:gap-4">
+              <div className="flex min-w-0 items-center gap-2.5 sm:gap-4">
+                <BrandLogo
+                  brand={slide.brand}
+                  size={48}
+                  className="sm:h-[84px] sm:w-[84px]"
+                  wobble={false}
+                />
+                <div className="min-w-0">
+                  <p className="font-display truncate text-lg font-extrabold leading-tight sm:text-3xl">
                     {slide.brand}
                   </p>
-                  <p className="text-sm font-bold text-[var(--muted)]">
+                  <p className="truncate text-xs font-bold text-[var(--muted)] sm:text-sm">
                     {slide.label}
                   </p>
                 </div>
               </div>
 
-              <span className="font-display num text-heading font-extrabold text-[var(--ink-surface)]">
+              <span className="font-display num shrink-0 text-2xl font-extrabold text-[var(--ink-surface)] sm:text-heading">
                 {slide.value}
               </span>
             </div>
 
-            <div className="voucher-ticket-divider mt-6 pt-4 flex items-center justify-between">
+            <div className="voucher-ticket-divider mt-4 flex flex-wrap items-center justify-between gap-2 pt-3.5 sm:mt-6 sm:pt-4">
               <code className="rounded-full border-2 border-[var(--ink-surface)] bg-[var(--surface)] px-3.5 py-1 text-xs font-extrabold">
                 {slide.code}
               </code>

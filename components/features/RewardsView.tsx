@@ -51,7 +51,7 @@ export function RewardsView() {
       )}
 
       <section
-        className="mx-auto max-w-7xl space-y-8 px-5 py-10 sm:px-8 sm:py-14"
+        className="mx-auto max-w-7xl space-y-6 px-4 py-8 sm:space-y-8 sm:px-8 sm:py-14"
         style={{ "--ticket-bg": "var(--ground)" } as React.CSSProperties}
       >
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -82,7 +82,7 @@ export function RewardsView() {
                 role="tab"
                 aria-selected={active}
                 onClick={() => setFilter(tab.id)}
-                className={`relative cursor-pointer rounded-full border-2 border-[var(--ink-surface)] px-6 py-3 font-display text-lg font-extrabold transition-colors ${
+                className={`relative cursor-pointer rounded-full border-2 border-[var(--ink-surface)] px-4 py-2 font-display text-sm font-extrabold transition-colors sm:px-6 sm:py-3 sm:text-lg ${
                   active
                     ? "text-[var(--ink-surface)]"
                     : "bg-[var(--surface)] text-[var(--muted)] hover:text-[var(--text)]"
@@ -119,7 +119,7 @@ export function RewardsView() {
             </Link>
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
             {filteredVouchers.map((voucher, idx) => (
               <Reveal key={voucher.id} delay={prefersReduced ? 0 : idx * 0.04}>
                 <VoucherCard

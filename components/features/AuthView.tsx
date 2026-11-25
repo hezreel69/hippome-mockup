@@ -77,10 +77,10 @@ export function AuthView() {
   }
 
   return (
-    <main className="grid min-h-[100dvh] w-full bg-[var(--ground)] lg:grid-cols-12">
+    <main className="grid min-h-[100dvh] w-full overflow-x-hidden bg-[var(--ground)] lg:grid-cols-12">
       {/* Left Poster Showcase (Midnight Ink) */}
-      <section className="flex flex-col justify-between gap-8 border-b-2 border-[var(--ink-surface)] bg-[var(--ink-surface)] px-5 py-8 text-[var(--floral-white)] sm:px-8 lg:col-span-6 lg:border-r-2 lg:border-b-0 lg:px-10 lg:py-10">
-        <div className="space-y-6">
+      <section className="flex min-w-0 flex-col justify-between gap-6 overflow-hidden border-b-2 border-[var(--ink-surface)] bg-[var(--ink-surface)] px-4 py-6 text-[var(--floral-white)] sm:px-8 sm:py-8 lg:col-span-6 lg:gap-8 lg:border-r-2 lg:border-b-0 lg:px-10 lg:py-10">
+        <div className="space-y-5 sm:space-y-6">
           <div className="flex items-center gap-2.5">
             <MnemoMark size={38} inverted />
             <span className="font-display text-2xl font-extrabold tracking-[-0.03em]">
@@ -88,17 +88,17 @@ export function AuthView() {
             </span>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <SplitText
               text="Study. Win. Repeat."
               by="word"
               stagger={0.08}
               className="text-display text-[var(--floral-white)]"
             />
-            <p className="text-lg font-bold text-[#cfd6e8]">
+            <p className="text-base font-bold text-[#cfd6e8] sm:text-lg">
               Pass quick quizzes and claim
             </p>
-            <div className="relative inline-flex items-center gap-3">
+            <div className="relative inline-flex flex-wrap items-center gap-2 sm:gap-3">
               <motion.span
                 aria-hidden="true"
                 animate={
@@ -107,7 +107,7 @@ export function AuthView() {
                     : { scale: [1, 1.3, 1], rotate: [0, 15, 0] }
                 }
                 transition={{ duration: 2, repeat: Infinity }}
-                className="text-2xl text-[var(--pearl-aqua)]"
+                className="text-xl text-[var(--pearl-aqua)] sm:text-2xl"
               >
                 ✦
               </motion.span>
@@ -126,7 +126,7 @@ export function AuthView() {
                   text="VOUCHERS!"
                   by="char"
                   stagger={0.045}
-                  className="font-display text-[3.5rem] font-extrabold leading-none tracking-[-0.04em] text-[var(--pearl-aqua)] text-fat sm:text-[4.75rem]"
+                  className="font-display text-[2rem] font-extrabold leading-none tracking-[-0.04em] text-[var(--pearl-aqua)] text-fat sm:text-[3.5rem] lg:text-[4.5rem]"
                 />
               </motion.div>
               <motion.span
@@ -137,7 +137,7 @@ export function AuthView() {
                     : { scale: [1, 1.3, 1], rotate: [0, -15, 0] }
                 }
                 transition={{ duration: 2.2, repeat: Infinity, delay: 0.4 }}
-                className="text-2xl text-[var(--periwinkle)]"
+                className="text-xl text-[var(--periwinkle)] sm:text-2xl"
               >
                 ✦
               </motion.span>
@@ -146,10 +146,10 @@ export function AuthView() {
         </div>
 
         {/* Auto-Playing Static Voucher Carousel */}
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-5 sm:space-y-6">
           <VoucherShowcase />
 
-          <div className="-mx-5 border-t border-[#2c3858] pt-4 sm:-mx-8 lg:-mx-10">
+          <div className="-mx-4 border-t border-[#2c3858] pt-4 sm:-mx-8 lg:-mx-10">
             <Marquee
               speed={22}
               items={BRAND_LIST.map((b) => (
@@ -167,13 +167,13 @@ export function AuthView() {
       </section>
 
       {/* Right Auth Column */}
-      <section className="flex flex-col justify-center px-5 py-8 sm:px-8 lg:col-span-6 lg:px-14 lg:py-10">
+      <section className="flex min-w-0 flex-col justify-center overflow-hidden px-4 py-6 sm:px-8 sm:py-8 lg:col-span-6 lg:px-14 lg:py-10">
         <div className="mx-auto w-full max-w-md space-y-6">
           <motion.div
-            initial={prefersReduced ? false : { rotate: -1, y: 12, opacity: 0 }}
-            animate={{ rotate: -1, y: 0, opacity: 1 }}
+            initial={prefersReduced ? false : { y: 12, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 260, damping: 22 }}
-            className="sticker space-y-5 bg-[var(--surface)] p-6 sm:p-7"
+            className="sticker space-y-5 bg-[var(--surface)] p-5 sm:p-7"
           >
             {/* Sliding Segmented Control */}
             <div className="relative grid grid-cols-2 rounded-full border-2 border-[var(--ink-surface)] bg-[var(--raised)] p-1">

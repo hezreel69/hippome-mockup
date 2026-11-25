@@ -60,7 +60,6 @@ function ScribbleUnderline() {
 
 export function AppShell({
   children,
-  pageTitle,
   focusMode = false,
 }: AppShellProps) {
   const router = useRouter();
@@ -134,14 +133,6 @@ export function AppShell({
   const isRewards = pathname.startsWith("/rewards");
   const isSubjectRoute = pathname.startsWith("/subjects");
 
-  const resolvedMobileTitle =
-    pageTitle ??
-    (isRewards
-      ? "Voucher Wallet"
-      : isSubjectRoute
-        ? "Subject"
-        : "Mnemo");
-
   const handleLogout = () => {
     setProfileMenuOpen(false);
     logout();
@@ -164,23 +155,28 @@ export function AppShell({
 
   return (
     <div className="min-h-[100dvh] w-full bg-[var(--ground)]">
-      {/* Desktop Flat Editorial Masthead */}
-      <header className="sticky top-0 z-40 hidden border-b-2 border-[var(--ink-surface)] bg-[var(--floral-white)] lg:block">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3.5">
+      {/* Desktop & Tablet Editorial Masthead */}
+      <header className="sticky top-0 z-40 hidden border-b-2 border-[var(--ink-surface-raised)] bg-[var(--ink-surface)] text-[var(--floral-white)] md:block">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 lg:gap-6 lg:px-6 lg:py-3.5">
           <Link href="/dashboard" className="flex items-center gap-3">
-            <MnemoMark size={38} />
-            <span className="font-display text-2xl font-extrabold leading-none tracking-[-0.04em] text-[var(--text)]">
-              MNEMO
-            </span>
+            <MnemoMark size={44} inverted />
+            <div className="flex flex-col">
+              <span className="mnemo-wordmark-sm text-2xl font-extrabold tracking-[-0.02em] lg:text-[28px]">
+                Mnemo
+              </span>
+              <span className="font-slopes text-xs leading-snug text-[#92d7f2] lg:text-sm">
+                Education is key!
+              </span>
+            </div>
           </Link>
 
-          <nav aria-label="Main navigation" className="flex items-center gap-8">
+          <nav aria-label="Main navigation" className="flex items-center gap-5 lg:gap-8">
             <Link
               href="/dashboard"
               className={`relative py-1 text-micro transition-colors ${
                 isDashboard
-                  ? "text-[var(--text)]"
-                  : "text-[var(--muted)] hover:text-[var(--text)]"
+                  ? "text-[var(--floral-white)]"
+                  : "text-[var(--lavender)]/80 hover:text-[var(--floral-white)]"
               }`}
             >
               <span>Home</span>
@@ -191,8 +187,8 @@ export function AppShell({
               href="/rewards"
               className={`relative py-1 text-micro transition-colors ${
                 isRewards
-                  ? "text-[var(--text)]"
-                  : "text-[var(--muted)] hover:text-[var(--text)]"
+                  ? "text-[var(--floral-white)]"
+                  : "text-[var(--lavender)]/80 hover:text-[var(--floral-white)]"
               }`}
             >
               <span>Wallet</span>
@@ -204,8 +200,8 @@ export function AppShell({
               onClick={() => setSubjectsOverlayOpen(true)}
               className={`relative cursor-pointer py-1 text-micro transition-colors ${
                 isSubjectRoute
-                  ? "text-[var(--text)]"
-                  : "text-[var(--muted)] hover:text-[var(--text)]"
+                  ? "text-[var(--floral-white)]"
+                  : "text-[var(--lavender)]/80 hover:text-[var(--floral-white)]"
               }`}
             >
               <span>Subjects</span>
@@ -220,7 +216,7 @@ export function AppShell({
                 initial={prefersReduced ? false : { scale: 1.25, rotate: -6 }}
                 animate={{ scale: 1, rotate: -2 }}
                 transition={{ type: "spring", stiffness: 320, damping: 16 }}
-                className="sticker-sm inline-flex items-center gap-1.5 bg-[var(--pearl-aqua)] px-3.5 py-1.5 text-xs font-bold text-[var(--ink-surface)]"
+                className="inline-flex items-center gap-1.5 rounded-full border-2 border-[var(--pearl-aqua)] bg-[var(--pearl-aqua)] px-3.5 py-1.5 text-xs font-bold text-[var(--ink-surface)] shadow-[3px_3px_0_rgba(247,244,234,0.3)]"
               >
                 <WalletIcon className="h-3.5 w-3.5" />
                 <span className="num">{availableVouchers} Ready</span>
@@ -232,7 +228,7 @@ export function AppShell({
               onClick={() => setProfileMenuOpen((v) => !v)}
               aria-expanded={profileMenuOpen}
               aria-label="Open student menu"
-              className="sticker-sm flex h-10 w-10 cursor-pointer items-center justify-center bg-[var(--periwinkle)] text-xs font-extrabold text-[var(--ink-surface)] hover:bg-[var(--wisteria)]"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border-2 border-[var(--pearl-aqua)] bg-[var(--periwinkle)] text-xs font-extrabold text-[var(--ink-surface)] shadow-[3px_3px_0_rgba(117,201,200,0.45)] hover:bg-[var(--wisteria)]"
             >
               {getInitials(activeUser.name)}
             </button>
@@ -286,17 +282,22 @@ export function AppShell({
       </header>
 
       {/* Mobile Top Bar */}
-      <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b-2 border-[var(--ink-surface)] bg-[var(--floral-white)] px-4 py-3 lg:hidden">
-        <Link href="/dashboard" className="flex items-center gap-2.5">
-          <MnemoMark size={30} />
-          <span className="font-display text-lg font-extrabold tracking-[-0.03em] text-[var(--text)]">
-            {resolvedMobileTitle}
-          </span>
+      <header className="sticky top-0 z-30 flex items-center justify-between gap-2 border-b-2 border-[var(--ink-surface-raised)] bg-[var(--ink-surface)] px-3.5 py-2.5 text-[var(--floral-white)] md:hidden">
+        <Link href="/dashboard" className="flex min-w-0 items-center gap-2">
+          <MnemoMark size={34} inverted />
+          <div className="flex min-w-0 flex-col">
+            <span className="mnemo-wordmark-sm text-xl font-extrabold tracking-[-0.02em]">
+              Mnemo
+            </span>
+            <span className="font-slopes text-[11px] leading-snug text-[#92d7f2]">
+              Education is key!
+            </span>
+          </div>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <Link href="/rewards">
-            <span className="sticker-sm inline-flex items-center gap-1 bg-[var(--pearl-aqua)] px-2.5 py-1 text-xs font-bold text-[var(--ink-surface)]">
+            <span className="inline-flex items-center gap-1 rounded-full border-2 border-[var(--pearl-aqua)] bg-[var(--pearl-aqua)] px-2.5 py-1 text-xs font-bold text-[var(--ink-surface)]">
               <WalletIcon className="h-3.5 w-3.5" />
               <span className="num">{availableVouchers}</span>
             </span>
@@ -305,7 +306,7 @@ export function AppShell({
             type="button"
             onClick={() => setProfileMenuOpen((v) => !v)}
             aria-label="Open student menu"
-            className="sticker-sm flex h-9 w-9 cursor-pointer items-center justify-center bg-[var(--periwinkle)] text-xs font-extrabold text-[var(--ink-surface)]"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-2 border-[var(--pearl-aqua)] bg-[var(--periwinkle)] text-xs font-extrabold text-[var(--ink-surface)]"
           >
             {getInitials(activeUser.name)}
           </button>
@@ -319,7 +320,7 @@ export function AppShell({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="fixed top-16 right-4 z-50 w-60 lg:hidden"
+            className="fixed top-16 right-4 z-50 w-60 md:hidden"
           >
             <div className="sticker bg-[var(--surface)] p-4">
               <p className="font-display text-sm font-bold text-[var(--text)]">
@@ -356,12 +357,12 @@ export function AppShell({
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="pb-safe-nav lg:pb-0">{children}</main>
+      <main className="pb-safe-nav md:pb-0">{children}</main>
 
-      {/* Mobile Flat Bottom Tab Bar */}
+      {/* Mobile Flat Bottom Tab Bar (Home, Wallet, Subjects) */}
       <nav
         aria-label="Mobile navigation"
-        className="pb-safe-dock fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t-2 border-[var(--ink-surface)] bg-[var(--floral-white)] px-3 pt-2 lg:hidden"
+        className="pb-safe-dock fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t-2 border-[var(--ink-surface)] bg-[var(--floral-white)] px-3 pt-2 md:hidden"
       >
         <Link
           href="/dashboard"
@@ -377,6 +378,23 @@ export function AppShell({
           <HomeIcon className="relative z-10 h-5 w-5 text-[var(--ink-surface)]" />
           <span className="relative z-10 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--ink-surface)]">
             Home
+          </span>
+        </Link>
+
+        <Link
+          href="/rewards"
+          className="relative flex flex-col items-center justify-center gap-0.5 py-1.5 text-center"
+        >
+          {isRewards && (
+            <motion.span
+              layoutId="mobile-tab-indicator"
+              transition={{ type: "spring", stiffness: 360, damping: 28 }}
+              className="absolute inset-x-2 inset-y-0.5 rounded-full border-2 border-[var(--ink-surface)] bg-[var(--wisteria)]"
+            />
+          )}
+          <WalletIcon className="relative z-10 h-5 w-5 text-[var(--ink-surface)]" />
+          <span className="relative z-10 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--ink-surface)]">
+            Wallet
           </span>
         </Link>
 
@@ -397,23 +415,6 @@ export function AppShell({
             Subjects
           </span>
         </button>
-
-        <Link
-          href="/rewards"
-          className="relative flex flex-col items-center justify-center gap-0.5 py-1.5 text-center"
-        >
-          {isRewards && (
-            <motion.span
-              layoutId="mobile-tab-indicator"
-              transition={{ type: "spring", stiffness: 360, damping: 28 }}
-              className="absolute inset-x-2 inset-y-0.5 rounded-full border-2 border-[var(--ink-surface)] bg-[var(--wisteria)]"
-            />
-          )}
-          <WalletIcon className="relative z-10 h-5 w-5 text-[var(--ink-surface)]" />
-          <span className="relative z-10 text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--ink-surface)]">
-            Wallet
-          </span>
-        </Link>
       </nav>
 
       {/* Full-Screen Subject Picker Overlay */}
@@ -423,7 +424,7 @@ export function AppShell({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-[var(--ink-surface)] p-5 text-[var(--floral-white)] sm:p-8"
+            className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-[var(--ink-surface)] p-4 text-[var(--floral-white)] sm:p-8"
             role="dialog"
             aria-modal="true"
             aria-label="Pick a Subject"
@@ -449,7 +450,7 @@ export function AppShell({
               </Button>
             </div>
 
-            <div className="mx-auto grid w-full max-w-5xl flex-1 content-center gap-6 sm:grid-cols-2">
+            <div className="mx-auto grid w-full max-w-5xl flex-1 content-center gap-4 sm:grid-cols-2 sm:gap-6">
               {SUBJECTS.map((subject, idx) => {
                 const prog = activeUser.subjectProgress[subject.id];
                 const href = prog?.level
@@ -480,7 +481,7 @@ export function AppShell({
                     <Link
                       href={href}
                       onClick={() => setSubjectsOverlayOpen(false)}
-                      className={`sticker flex h-full min-h-[190px] flex-col justify-between gap-4 p-7 text-[var(--ink-surface)] ${palette.bg}`}
+                      className={`sticker flex h-full min-h-[150px] flex-col justify-between gap-4 p-5 text-[var(--ink-surface)] sm:min-h-[190px] sm:p-7 ${palette.bg}`}
                     >
                       <div className="flex items-start justify-end">
                         <Badge tone={prog?.level ? LEVEL_TONE[prog.level] : "neutral"}>

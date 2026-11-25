@@ -103,7 +103,7 @@ export function SubjectHubView({ subjectId }: { subjectId: SubjectId }) {
             stagger={0.05}
             className="text-display text-[var(--ink-surface)]"
           />
-          <p className="font-display max-w-2xl text-2xl font-extrabold text-[var(--ink-surface)]/85">
+          <p className="font-display max-w-2xl text-lg font-extrabold text-[var(--ink-surface)]/85 sm:text-2xl">
             {subject.tagline}
           </p>
 
@@ -161,13 +161,13 @@ export function SubjectHubView({ subjectId }: { subjectId: SubjectId }) {
                     transition: { type: "spring", stiffness: 300, damping: 18 },
                   }
             }
-            className="sticker flex h-full flex-col justify-between gap-6 bg-[var(--surface)] p-7"
+            className="sticker flex h-full flex-col justify-between gap-6 bg-[var(--surface)] p-5 sm:p-7"
           >
             <div className="space-y-4">
               <Badge tone={LEVEL_TONE[currentLevel]}>
                 {LEVEL_LABELS[currentLevel]}
               </Badge>
-              <h3 className="font-display text-3xl font-extrabold leading-tight text-[var(--text)] sm:text-4xl">
+              <h3 className="font-display text-2xl font-extrabold leading-tight text-[var(--text)] sm:text-4xl">
                 Random Quiz
               </h3>
               <p className="text-base font-semibold text-[var(--muted)]">
@@ -207,11 +207,11 @@ export function SubjectHubView({ subjectId }: { subjectId: SubjectId }) {
                     transition: { type: "spring", stiffness: 300, damping: 18 },
                   }
             }
-            className="sticker flex h-full flex-col justify-between gap-6 bg-[var(--accent-soft)] p-7"
+            className="sticker flex h-full flex-col justify-between gap-6 bg-[var(--accent-soft)] p-5 sm:p-7"
           >
             <div className="space-y-4">
               <Badge tone="ink">DEMO</Badge>
-              <h3 className="font-display text-3xl font-extrabold leading-tight text-[var(--text)] sm:text-4xl">
+              <h3 className="font-display text-2xl font-extrabold leading-tight text-[var(--text)] sm:text-4xl">
                 Demo Quiz
               </h3>
               <p className="text-base font-semibold text-[var(--ink-surface)]/80">

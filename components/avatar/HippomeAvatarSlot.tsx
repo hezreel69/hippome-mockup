@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import {
   HIPPOME_AVATAR_CONFIG,
   HippomeExpression,
 } from "@/lib/avatar-config";
 
-type AvatarSize = "sm" | "md" | "lg" | "xl" | "mega";
+export type AvatarSize = "sm" | "md" | "lg" | "xl" | "mega";
 
 interface HippomeAvatarSlotProps {
   expression?: HippomeExpression;
@@ -15,15 +15,17 @@ interface HippomeAvatarSlotProps {
   floating?: boolean;
   talking?: boolean;
   onDark?: boolean;
+  frameless?: boolean;
+  srcOverride?: string;
   className?: string;
 }
 
 const SIZE_CLASSES: Record<AvatarSize, string> = {
-  sm: "h-12 w-12 rounded-[14px]",
-  md: "h-16 w-16 rounded-[18px]",
-  lg: "h-24 w-24 rounded-[20px]",
-  xl: "h-28 w-28 sm:h-32 sm:w-32 rounded-[24px]",
-  mega: "h-56 w-56 sm:h-72 sm:w-72 md:h-80 md:w-80",
+  sm: "h-10 w-10 sm:h-12 sm:w-12 rounded-[14px]",
+  md: "h-12 w-12 sm:h-16 sm:w-16 rounded-[18px]",
+  lg: "h-24 w-24 sm:h-28 sm:w-28 rounded-[22px]",
+  xl: "h-28 w-28 sm:h-36 sm:w-36 md:h-40 md:w-40 rounded-[24px]",
+  mega: "h-36 w-36 sm:h-48 sm:w-48 md:h-56 md:w-56",
 };
 
 function StylizedHippoSvg({
@@ -267,8 +269,8 @@ function StylizedHippoSvg({
 
 /**
  * Dedicated drop-in avatar slot for Hippome.
- * - `useCustomImage: false` (default): animated SVG mascot.
- * - `useCustomImage: true`: static PNG from `mockup/public/avatars/` with no animation.
+ * - `useCustomImage: true` (default): renders custom PNG (`/logo.png`, or `srcOverride` for welcome/fail).
+ *   Falls back gracefully to the built-in SVG mascot if the PNG file is missing.
  */
 export function HippomeAvatarSlot({
   expression = "happy",
@@ -276,6 +278,8 @@ export function HippomeAvatarSlot({
   floating = false,
   talking = false,
   onDark = false,
+  frameless = false,
+  srcOverride,
   className = "",
 }: HippomeAvatarSlotProps) {
   const prefersReduced = Boolean(useReducedMotion());
@@ -283,26 +287,34 @@ export function HippomeAvatarSlot({
   const isMega = size === "mega";
 
   const src =
+    srcOverride ??
     HIPPOME_AVATAR_CONFIG.byExpression[expression] ??
     HIPPOME_AVATAR_CONFIG.defaultSrc;
 
-  const containerStyle = isMega
-    ? ""
-    : onDark
-      ? "bg-[var(--ink-surface-raised)] border-2 border-[var(--pearl-aqua)]"
-      : "bg-[var(--raised)] border-2 border-[var(--ink-surface)] shadow-[3px_3px_0_var(--ink-surface)]";
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const imgFailed = failedSrc === src;
 
-  if (isCustomStatic) {
+  const containerStyle =
+    isMega || frameless
+      ? ""
+      : onDark
+        ? "bg-[var(--ink-surface-raised)] border-2 border-[var(--pearl-aqua)]"
+        : "bg-[var(--raised)] border-2 border-[var(--ink-surface)] shadow-[3px_3px_0_var(--ink-surface)]";
+
+  if (isCustomStatic && !imgFailed) {
     return (
       <div
         data-avatar-slot="hippome"
-        className={`relative flex shrink-0 items-center justify-center overflow-hidden ${SIZE_CLASSES[size]} ${containerStyle} ${className}`}
+        className={`relative flex shrink-0 items-center justify-center overflow-hidden ${SIZE_CLASSES[size]} ${containerStyle} ${
+          floating && !prefersReduced ? "anim-hippo-breathe" : ""
+        } ${className}`}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={src}
           alt={HIPPOME_AVATAR_CONFIG.alt}
-          className="h-full w-full object-contain p-1.5"
+          onError={() => setFailedSrc(src)}
+          className={`h-full w-full object-contain ${frameless || isMega ? "" : "p-1.5"}`}
         />
       </div>
     );
